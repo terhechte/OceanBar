@@ -18,6 +18,9 @@
 		4DC520EF190E94CD00765BA2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DC520CE190E94CD00765BA2 /* Cocoa.framework */; };
 		4DC520F7190E94CE00765BA2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4DC520F5190E94CE00765BA2 /* InfoPlist.strings */; };
 		4DC520F9190E94CE00765BA2 /* OceanBarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC520F8190E94CE00765BA2 /* OceanBarTests.m */; };
+		4DC52105190E95CD00765BA2 /* BTStatusbarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC52104190E95CD00765BA2 /* BTStatusbarController.m */; };
+		4DC52108190E9A5200765BA2 /* BTOceanData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC52107190E9A5200765BA2 /* BTOceanData.m */; };
+		5F85F25E88E14A40A1450941 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA8BD54FDD0B42CA9672C86D /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +53,15 @@
 		4DC520F4190E94CD00765BA2 /* OceanBarTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OceanBarTests-Info.plist"; sourceTree = "<group>"; };
 		4DC520F6190E94CE00765BA2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4DC520F8190E94CE00765BA2 /* OceanBarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OceanBarTests.m; sourceTree = "<group>"; };
+		4DC52103190E95CD00765BA2 /* BTStatusbarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTStatusbarController.h; sourceTree = "<group>"; };
+		4DC52104190E95CD00765BA2 /* BTStatusbarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTStatusbarController.m; sourceTree = "<group>"; };
+		4DC52106190E9A5200765BA2 /* BTOceanData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTOceanData.h; sourceTree = "<group>"; };
+		4DC52107190E9A5200765BA2 /* BTOceanData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTOceanData.m; sourceTree = "<group>"; };
+		4DC52109190E9D2700765BA2 /* libPods-AFNetworking.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-AFNetworking.a"; path = "Pods/build/Debug-iphoneos/libPods-AFNetworking.a"; sourceTree = "<group>"; };
+		4DC5210B190E9D9500765BA2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		4DC5210D190E9DE300765BA2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		7C472EE4DCB64214826CD8A4 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		BA8BD54FDD0B42CA9672C86D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +70,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4DC520CF190E94CD00765BA2 /* Cocoa.framework in Frameworks */,
+				5F85F25E88E14A40A1450941 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +93,7 @@
 				4DC520F2190E94CD00765BA2 /* OceanBarTests */,
 				4DC520CD190E94CD00765BA2 /* Frameworks */,
 				4DC520CC190E94CD00765BA2 /* Products */,
+				7C472EE4DCB64214826CD8A4 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,9 +109,13 @@
 		4DC520CD190E94CD00765BA2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4DC5210D190E9DE300765BA2 /* Security.framework */,
+				4DC5210B190E9D9500765BA2 /* SystemConfiguration.framework */,
+				4DC52109190E9D2700765BA2 /* libPods-AFNetworking.a */,
 				4DC520CE190E94CD00765BA2 /* Cocoa.framework */,
 				4DC520ED190E94CD00765BA2 /* XCTest.framework */,
 				4DC520D0190E94CD00765BA2 /* Other Frameworks */,
+				BA8BD54FDD0B42CA9672C86D /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -120,6 +138,10 @@
 				4DC520E3190E94CD00765BA2 /* MainMenu.xib */,
 				4DC520E6190E94CD00765BA2 /* Images.xcassets */,
 				4DC520D5190E94CD00765BA2 /* Supporting Files */,
+				4DC52103190E95CD00765BA2 /* BTStatusbarController.h */,
+				4DC52104190E95CD00765BA2 /* BTStatusbarController.m */,
+				4DC52106190E9A5200765BA2 /* BTOceanData.h */,
+				4DC52107190E9A5200765BA2 /* BTOceanData.m */,
 			);
 			path = OceanBar;
 			sourceTree = "<group>";
@@ -161,9 +183,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4DC520FC190E94CE00765BA2 /* Build configuration list for PBXNativeTarget "OceanBar" */;
 			buildPhases = (
+				F6C9855FB0A1428DA8ED847E /* Check Pods Manifest.lock */,
 				4DC520C7190E94CD00765BA2 /* Sources */,
 				4DC520C8190E94CD00765BA2 /* Frameworks */,
 				4DC520C9190E94CD00765BA2 /* Resources */,
+				2043B7B950A342DE90EED8B3 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -248,6 +272,39 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2043B7B950A342DE90EED8B3 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F6C9855FB0A1428DA8ED847E /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4DC520C7190E94CD00765BA2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -255,6 +312,8 @@
 			files = (
 				4DC520E2190E94CD00765BA2 /* BTAppDelegate.m in Sources */,
 				4DC520DB190E94CD00765BA2 /* main.m in Sources */,
+				4DC52108190E9A5200765BA2 /* BTOceanData.m in Sources */,
+				4DC52105190E95CD00765BA2 /* BTStatusbarController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,12 +443,17 @@
 		};
 		4DC520FD190E94CE00765BA2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7C472EE4DCB64214826CD8A4 /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OceanBar/OceanBar-Prefix.pch";
 				INFOPLIST_FILE = "OceanBar/OceanBar-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -397,12 +461,17 @@
 		};
 		4DC520FE190E94CE00765BA2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7C472EE4DCB64214826CD8A4 /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OceanBar/OceanBar-Prefix.pch";
 				INFOPLIST_FILE = "OceanBar/OceanBar-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -467,6 +536,7 @@
 				4DC520FE190E94CE00765BA2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4DC520FF190E94CE00765BA2 /* Build configuration list for PBXNativeTarget "OceanBarTests" */ = {
 			isa = XCConfigurationList;
@@ -475,6 +545,7 @@
 				4DC52101190E94CE00765BA2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
