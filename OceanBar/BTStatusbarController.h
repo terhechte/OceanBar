@@ -9,5 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface BTStatusbarController : NSObject
+@property (weak) id delegate;
+@end
 
+@protocol BTStatusbarControllerDelegate <NSObject>
+- (void) openPreferences;
+- (void) exit;
 @end
