@@ -19,7 +19,7 @@ typedef void (^BTOceanDataError)(NSError *error);
 
 @interface BTOceanDataItem : NSObject
 - (id) initWithDictionary:(NSDictionary *)otherDictionary;
-- (id)objectForKeyedSubscript:(id <NSCopying>)key;
+- (id) objectForKeyedSubscript:(id <NSCopying>)key;
 - (NSNumber*) identifier;
 - (NSString*) name;
 - (NSString*) slug;

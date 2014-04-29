@@ -148,7 +148,7 @@
     [self requestOperationFor:[self sizeURLString]
                      createClass:@"BTOceanDataSize"
                      propertyKey:@"sizes"
-                    successBlock:^(id results) {
+                    successBlock:^(NSDictionary* results) {
                         _regions = results;
                     } failBlock:^(NSError *error) {
                         NSLog(@"Error: %@", error);
@@ -159,7 +159,7 @@
     [self requestOperationFor:[self regionURLString]
                      createClass:@"BTOceanDataRegion"
                      propertyKey:@"regions"
-                    successBlock:^(id results) {
+                    successBlock:^(NSDictionary* results) {
                         _regions = results;
                     } failBlock:^(NSError *error) {
                         NSLog(@"Error: %@", error);
@@ -170,7 +170,7 @@
     [self requestOperationFor:[self imageURLString]
                      createClass:@"BTOceanDataImage"
                      propertyKey:@"images"
-                    successBlock:^(id resultDict) {
+                    successBlock:^(NSDictionary* resultDict) {
                         _images = resultDict;
                     } failBlock:^(NSError *error) {
                         NSLog(@"Error: %@", error);
@@ -181,14 +181,14 @@
     [self requestOperationFor:[self dropletURLString]
                      createClass:@"BTOceanDataDroplet"
                      propertyKey:@"droplets"
-                    successBlock:^(id results) {
+                    successBlock:^(NSDictionary* results) {
                         // add regions and images
-                        for (BTOceanDataDroplet *droplet in (NSArray*)results) {
+                        for (BTOceanDataDroplet *droplet in [results allValues]) {
                             droplet.region = _regions[droplet[@"region_id"]];
                             droplet.size = _sizes[droplet[@"size_id"]];
                             droplet.image = _images[droplet[@"image_id"]];
                         }
-                        actionBlock(results);
+                        actionBlock([results allValues]);
                     } failBlock:^(NSError *error) {
                         errorBlock(error);
                     }];
