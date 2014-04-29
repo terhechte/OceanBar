@@ -20,6 +20,8 @@
 		4DC520F9190E94CE00765BA2 /* OceanBarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC520F8190E94CE00765BA2 /* OceanBarTests.m */; };
 		4DC52105190E95CD00765BA2 /* BTStatusbarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC52104190E95CD00765BA2 /* BTStatusbarController.m */; };
 		4DC52108190E9A5200765BA2 /* BTOceanData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC52107190E9A5200765BA2 /* BTOceanData.m */; };
+		4DC8BE69190EDFFF00B250CD /* BTSocialTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC8BE68190EDFFF00B250CD /* BTSocialTextView.m */; };
+		4DC8BE6B190EE5CA00B250CD /* statusbarIcon1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4DC8BE6A190EE5CA00B250CD /* statusbarIcon1.png */; };
 		5F85F25E88E14A40A1450941 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA8BD54FDD0B42CA9672C86D /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +62,9 @@
 		4DC52109190E9D2700765BA2 /* libPods-AFNetworking.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-AFNetworking.a"; path = "Pods/build/Debug-iphoneos/libPods-AFNetworking.a"; sourceTree = "<group>"; };
 		4DC5210B190E9D9500765BA2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4DC5210D190E9DE300765BA2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		4DC8BE67190EDFFF00B250CD /* BTSocialTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSocialTextView.h; sourceTree = "<group>"; };
+		4DC8BE68190EDFFF00B250CD /* BTSocialTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTSocialTextView.m; sourceTree = "<group>"; };
+		4DC8BE6A190EE5CA00B250CD /* statusbarIcon1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = statusbarIcon1.png; path = Resources/statusbarIcon1.png; sourceTree = SOURCE_ROOT; };
 		7C472EE4DCB64214826CD8A4 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		BA8BD54FDD0B42CA9672C86D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -142,6 +147,8 @@
 				4DC52104190E95CD00765BA2 /* BTStatusbarController.m */,
 				4DC52106190E9A5200765BA2 /* BTOceanData.h */,
 				4DC52107190E9A5200765BA2 /* BTOceanData.m */,
+				4DC8BE67190EDFFF00B250CD /* BTSocialTextView.h */,
+				4DC8BE68190EDFFF00B250CD /* BTSocialTextView.m */,
 			);
 			path = OceanBar;
 			sourceTree = "<group>";
@@ -149,6 +156,7 @@
 		4DC520D5190E94CD00765BA2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4DC8BE6A190EE5CA00B250CD /* statusbarIcon1.png */,
 				4DC520D6190E94CD00765BA2 /* OceanBar-Info.plist */,
 				4DC520D7190E94CD00765BA2 /* InfoPlist.strings */,
 				4DC520DA190E94CD00765BA2 /* main.m */,
@@ -258,6 +266,7 @@
 				4DC520D9190E94CD00765BA2 /* InfoPlist.strings in Resources */,
 				4DC520E7190E94CD00765BA2 /* Images.xcassets in Resources */,
 				4DC520DF190E94CD00765BA2 /* Credits.rtf in Resources */,
+				4DC8BE6B190EE5CA00B250CD /* statusbarIcon1.png in Resources */,
 				4DC520E5190E94CD00765BA2 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -312,6 +321,7 @@
 			files = (
 				4DC520E2190E94CD00765BA2 /* BTAppDelegate.m in Sources */,
 				4DC520DB190E94CD00765BA2 /* main.m in Sources */,
+				4DC8BE69190EDFFF00B250CD /* BTSocialTextView.m in Sources */,
 				4DC52108190E9A5200765BA2 /* BTOceanData.m in Sources */,
 				4DC52105190E95CD00765BA2 /* BTStatusbarController.m in Sources */,
 			);
