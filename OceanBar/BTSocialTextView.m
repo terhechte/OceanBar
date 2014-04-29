@@ -10,7 +10,9 @@ static const NSUInteger kTabStopWidth = 80;
 
 @interface BTSocialTextView()
 {
-    NSMutableDictionary* _storage;
+    NSMutableArray *_keyStorage;
+    NSMutableArray *_valueStorage;
+    NSTrackingArea *_trackingArea;
 }
 
 @end
@@ -25,24 +27,31 @@ static const NSUInteger kTabStopWidth = 80;
 - (id) initWithFrame:(NSRect)frameRect {
     self = [super initWithFrame:frameRect];
     if (self) {
-        _storage = [NSMutableDictionary dictionary];
+        _keyStorage = @[].mutableCopy;
+        _valueStorage = @[].mutableCopy;
         
         [self setDrawsBackground:NO];
+        
+        _trackingArea = [[NSTrackingArea alloc]initWithRect:[self bounds] options: (NSTrackingMouseMoved | NSTrackingActiveInKeyWindow) owner:self userInfo:nil];
+        [self addTrackingArea:_trackingArea];
     }
     return self;
 }
 
-- (void)setSelectedRange:(NSRange)charRange affinity:(NSSelectionAffinity)affinity stillSelecting:(BOOL)flag
-{
-    
+- (void)setSelectedRange:(NSRange)charRange affinity:(NSSelectionAffinity)affinity stillSelecting:(BOOL)flag {
+    // we don't want selection
 }
 
 -(void)drawInsertionPointInRect:(NSRect)aRect color:(NSColor *)aColor turnedOn:(BOOL)flag {
-    
+    // we don't want an insertion cursor
 }
 
-- (void)drawRect:(NSRect)rect
-{
+- (void)mouseMoved:(NSEvent *)event {
+    // we want the default arrow cursor
+    [[NSCursor arrowCursor] set];
+}
+
+- (void)drawRect:(NSRect)rect {
     [[NSColor gridColor] setFill];
     NSRectFill(rect);
     
@@ -54,8 +63,11 @@ static const NSUInteger kTabStopWidth = 80;
     [super drawRect:rect];
 }
 
-- (void) addItem:(NSString*)item withValue:(NSString*)value {
-    _storage[item] = value;
+- (void)updateTrackingAreas {
+    [super updateTrackingAreas];
+    [self removeTrackingArea:_trackingArea];
+    _trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds] options: (NSTrackingMouseMoved | NSTrackingActiveInKeyWindow) owner:self userInfo:nil];
+    [self addTrackingArea:_trackingArea];
 }
 
 //--------------------------------------------------------------------------------------
@@ -63,13 +75,19 @@ static const NSUInteger kTabStopWidth = 80;
 #pragma mark Public Interface
 //--------------------------------------------------------------------------------------
 
+- (void) addItem:(NSString*)item withValue:(NSString*)value {
+    [_keyStorage addObject:item];
+    [_valueStorage addObject:value];
+}
+
 - (void) render {
     [self setEditable:YES];
     
     [self setString:@""];
     
-    for (NSString *key in [_storage allKeys]) {
-        [self renderItem:key withValue:_storage[key]];
+    for (NSString *key in _keyStorage.reverseObjectEnumerator.allObjects) {
+        [self renderItem:key
+               withValue:_valueStorage[[_keyStorage indexOfObject:key]]];
     }
     
     [[[self enclosingScrollView] contentView] scrollToPoint:NSMakePoint(0, 0)];
@@ -77,43 +95,37 @@ static const NSUInteger kTabStopWidth = 80;
     [self setEditable:NO];
 }
 
+//-----------------------------------------------------------------------------
+#pragma mark Private
+//-----------------------------------------------------------------------------
+
 - (void) renderItem:(NSString*)item withValue:(NSString*)value {
+    
+    NSDictionary *valueTextAttributes =
+    @{NSFontAttributeName: [NSFont fontWithName: kValueFontName size: kItemFontSize],
+      NSForegroundColorAttributeName: [NSColor blackColor]};
+    
+    // by replacing breaks with breaktabs, we can keep the indent
     NSAttributedString *valueString =
-    [[NSAttributedString alloc] initWithString:value
-                                    attributes:[self defaultTextStyleWithColor:
-                                                [NSColor blackColor]]];
+    [[NSAttributedString alloc]
+     initWithString:[value stringByReplacingOccurrencesOfString:@"\n"
+                                                     withString:@"\n\t"]
+     attributes:valueTextAttributes];
     
-    [self insertAttributedStringParagraph:valueString withHeadline:item];
-}
-
-- (NSDictionary*) defaultTextStyleWithColor:(NSColor*)color {
-    NSDictionary* tokenFontAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [NSFont fontWithName: kValueFontName size: kItemFontSize], NSFontAttributeName,
-                                         color, NSForegroundColorAttributeName, nil];
-    return tokenFontAttributes;
-}
-
-- (void)insertAttachmentCell:(NSTextAttachmentCell *)cell toTextView:(NSTextView *)textView
-{
-    NSTextAttachment *attachment = [NSTextAttachment new];
-    [attachment setAttachmentCell:cell];
-    [textView insertText:[NSAttributedString attributedStringWithAttachment:attachment]];
-}
-
-- (void) insertAttributedStringParagraph:(NSAttributedString*)aString withHeadline:(NSString*)glyph {
+    NSFont *itemFont = [NSFont fontWithName:kItemFontName size:kItemFontSize];
     
-    NSFont *glyphFont = [NSFont fontWithName:kItemFontName size:kItemFontSize];
+    NSString *tabbedItemFont = [item stringByAppendingString:@"\t"];
     
-    NSString *stringWithGlyphPlusSpace = [glyph stringByAppendingString:@"\t"];
-    
-    NSMutableAttributedString *mutableString = [aString mutableCopy];
+    NSMutableAttributedString *mutableString = [valueString mutableCopy];
     [mutableString insertAttributedString:
      [[NSAttributedString alloc] initWithString:
-      [NSString stringWithFormat:@"\n\n%@", stringWithGlyphPlusSpace]]
+      [NSString stringWithFormat:@"%@", tabbedItemFont]]
                                   atIndex:0];
+    [mutableString appendAttributedString:
+     [[NSAttributedString alloc] initWithString:@"\n\n"]];
     
     NSMutableParagraphStyle *paragStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    [paragStyle setAlignment:NSLeftTextAlignment]; // default, but just in case
+    //[paragStyle setAlignment:NSLeftTextAlignment]; // default, but just in case
     [paragStyle setLineSpacing:kLineSpacing];
     
     // Define a tab stop to the right of the bullet glyph.
@@ -127,14 +139,16 @@ static const NSUInteger kTabStopWidth = 80;
     // Set the indentation for the wrapped lines to the same place as the tab stop.
     [paragStyle setHeadIndent:kTabStopWidth];
     
-    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                          glyphFont, NSFontAttributeName,
-                          [NSColor darkGrayColor], NSForegroundColorAttributeName,
-                          paragStyle, NSParagraphStyleAttributeName,
-                          nil];
+    // set the attributes
+    [mutableString setAttributes:@{NSParagraphStyleAttributeName: paragStyle,
+                                   NSFontAttributeName: itemFont}
+                           range:NSMakeRange(0, mutableString.length)];
     
-    // Use the attributes dictionary to make an attributed string out of the plain string.
-    [mutableString setAttributes:dict range:NSMakeRange(0, [stringWithGlyphPlusSpace length] + 1)];
+    // Set the text color for the headline
+    [mutableString setAttributes:@{NSFontAttributeName: itemFont,
+                           NSForegroundColorAttributeName: [NSColor darkGrayColor],
+                                   NSParagraphStyleAttributeName: paragStyle}
+                           range:NSMakeRange(0, [tabbedItemFont length])];
     
     [self insertText:mutableString];
 }
