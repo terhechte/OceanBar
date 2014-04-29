@@ -12,7 +12,12 @@
 
 typedef void (^ConfirmationAction)();
 
-@interface BTStatusbarController()
+const void* kApiCredentialContext = &kApiCredentialContext;
+
+@interface BTStatusbarController() {
+    bool _loading;
+    NSString *_loadError;
+}
 @property (retain) NSStatusItem* mainStatusbarItem;
 @property (retain) NSTimer* reloadTimer;
 @property (retain) BTOceanData *oceanData;
@@ -29,14 +34,40 @@ typedef void (^ConfirmationAction)();
     if (self) {
         self.oceanData = [[BTOceanData alloc] init];
         
-        [self setupStatusbarItem];
+        [self setupStatusbarItemWithDroplets:@[]];
         
         [self reloadContents];
+        
+        // any changes to the id / key have to trigger a reload
+        NSUserDefaultsController *userDefaultsController = [NSUserDefaultsController sharedUserDefaultsController];
+        [userDefaultsController addObserver:self
+                                 forKeyPath:@"values.doAPIKey"
+                                    options:0
+                                    context:&kApiCredentialContext];
+        [userDefaultsController addObserver:self
+                                 forKeyPath:@"values.doAPISecret"
+                                    options:0
+                                    context:&kApiCredentialContext];
     }
     return self;
 }
 
-- (void) setupStatusbarItem {
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == &kApiCredentialContext) {
+        [self forceReload];
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void) forceReload {
+        [self.reloadTimer invalidate];
+        self.reloadTimer = nil;
+        [self reloadContents];
+}
+
+- (void) setupStatusbarItemWithDroplets:(NSArray*)droplets {
     self.mainStatusbarItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     //[self.menuBarStatusItem setMenu:self.menuBarMenu];
     [self.mainStatusbarItem setImage:[NSImage imageNamed:@"statusbarIcon1"]];
@@ -44,33 +75,66 @@ typedef void (^ConfirmationAction)();
     
     //let it highlight when the user activates it
     [self.mainStatusbarItem setHighlightMode:YES];
+    
+    [self.mainStatusbarItem setMenu: [self mainMenuForDroplets:droplets]];
 }
 
 - (void) reloadContents {
+    // ignore if the credentials aren't set yet
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([[defaults objectForKey:@"doAPIKey"] length] == 0 || [[defaults objectForKey:@"doAPISecret"] length] == 0)return;
+    
+    // sometimes, loading takes time, simple indicator
+    _loading = YES;
+    
     [self.oceanData loadDropletsWithSuccess:^(NSArray *results) {
-        [self.mainStatusbarItem setMenu: [self mainMenuForDroplets:results]];
+        _loading = NO;
+        _loadError = nil;
+        [self setupStatusbarItemWithDroplets:results];
     } failure:^(NSError *error) {
-        NSAlert *alert = [NSAlert alertWithMessageText:@"Error"
-                                         defaultButton:@"OK"
-                                       alternateButton:nil
-                                           otherButton:nil
-                             informativeTextWithFormat:error.localizedDescription];
-        [alert runModal];
+        _loading = NO;
+        
+        _loadError = error.localizedDescription;
+        
+        [self setupStatusbarItemWithDroplets:@[]];
     }];
+    
+    // and trigger the next reload
+    NSNumber *reloadInterval = [defaults objectForKey:@"reloadInterval"];
+    if (reloadInterval.intValue < 1)reloadInterval = @1;
+    self.reloadTimer = [NSTimer scheduledTimerWithTimeInterval:reloadInterval.intValue * 60.0
+                                                        target:self
+                                                      selector:@selector(reloadContents)
+                                                      userInfo:nil
+                                                       repeats:NO];
 }
 
 - (NSMenu*) mainMenuForDroplets:(NSArray*)droplets {
     NSMenu *statusMenu = [[NSMenu alloc] init];
     
-    for (BTOceanDataDroplet* droplet in droplets) {
-        NSMenuItem *mainItem = [[NSMenuItem alloc] init];
-        [mainItem setTitle:droplet.name];
-        [mainItem setEnabled: [droplet isActive]];
-        
-        NSMenu *subMenu = [self menuForDroplet:droplet];
-        [mainItem setSubmenu:subMenu];
-        
-        [statusMenu addItem: mainItem];
+    if (droplets.count > 0) {
+        for (BTOceanDataDroplet* droplet in droplets) {
+            NSMenuItem *mainItem = [[NSMenuItem alloc] init];
+            [mainItem setTitle:droplet.name];
+            [mainItem setEnabled: [droplet isActive]];
+            
+            NSMenu *subMenu = [self menuForDroplet:droplet];
+            [mainItem setSubmenu:subMenu];
+            
+            [statusMenu addItem: mainItem];
+        }
+    } else {
+        if (_loading) {
+            NSMenuItem *mainItem = [[NSMenuItem alloc] init];
+            [mainItem setTitle:NSLocalizedString(@"Loading...", @"If we're loading data. displayed as a menu entry")];
+            [statusMenu addItem:mainItem];
+        }
+        if (_loadError) {
+            NSMenuItem *mainItem = [[NSMenuItem alloc] init];
+            [mainItem setTitle:$p(@"Error: %@", _loadError)];
+            [statusMenu addItem:mainItem];
+        }
+        // otherwise, the user probably didn't set it up, or we don't have any droplets...
     }
     
     [statusMenu addItem:[NSMenuItem separatorItem]];
@@ -263,7 +327,9 @@ typedef void (^ConfirmationAction)();
          okButton:NSLocalizedString(@"Yes, reboot it", @"droplet action")
      cancelButton:NSLocalizedString(@"No", @"droplet action")
        withAction:^{
-           [self.oceanData rebootDroplet:droplet];
+           [self.oceanData rebootDroplet:droplet finishAction:^(id results) {
+               [self forceReload];
+           }];
        }];
 }
 
@@ -273,7 +339,9 @@ typedef void (^ConfirmationAction)();
          okButton:NSLocalizedString(@"Yes, shut it down", @"droplet action")
      cancelButton:NSLocalizedString(@"No", @"droplet action")
        withAction:^{
-           [self.oceanData shutdownDroplet:droplet];
+           [self.oceanData shutdownDroplet:droplet finishAction:^(id results) {
+               [self forceReload];
+           }];
        }];
 }
 
