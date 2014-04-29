@@ -34,8 +34,16 @@ static const NSUInteger kTabStopWidth = 80;
         
         _trackingArea = [[NSTrackingArea alloc]initWithRect:[self bounds] options: (NSTrackingMouseMoved | NSTrackingActiveInKeyWindow) owner:self userInfo:nil];
         [self addTrackingArea:_trackingArea];
+        
+        //[super setTextContainerInset:NSMakeSize(1.0f, 10.0f)];
     }
     return self;
+}
+
+- (NSPoint)textContainerOrigin {
+    NSPoint origin = [super textContainerOrigin];
+    NSPoint newOrigin = NSMakePoint(origin.x, origin.y + 10);
+    return newOrigin;
 }
 
 - (void)setSelectedRange:(NSRange)charRange affinity:(NSSelectionAffinity)affinity stillSelecting:(BOOL)flag {
@@ -56,9 +64,14 @@ static const NSUInteger kTabStopWidth = 80;
     NSRectFill(rect);
     
     // draw the gray area for the keys
-    NSRect drawRect = NSMakeRect(0, 0, kTabStopWidth, rect.size.height);
+    NSRect drawRect = NSMakeRect(0, 0, kTabStopWidth - 2, self.bounds.size.height);
     [[NSColor controlHighlightColor] setFill];
     NSRectFill(drawRect);
+    
+    // draw two 1px lines for top and bottom
+    [[NSColor grayColor] setFill];
+    NSRectFill(NSMakeRect(0, 0, self.bounds.size.width, 1));
+    NSRectFill(NSMakeRect(0, self.bounds.size.height - 1, self.bounds.size.width, 1));
     
     [super drawRect:rect];
 }
@@ -68,6 +81,15 @@ static const NSUInteger kTabStopWidth = 80;
     [self removeTrackingArea:_trackingArea];
     _trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds] options: (NSTrackingMouseMoved | NSTrackingActiveInKeyWindow) owner:self userInfo:nil];
     [self addTrackingArea:_trackingArea];
+}
+
+
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow {
+    [super viewWillMoveToWindow:newWindow];
+    
+    // update our height to the minimum necessary
+    NSRect usedRect = [self.layoutManager usedRectForTextContainer:self.textContainer];
+    [self setFrame:usedRect];
 }
 
 //--------------------------------------------------------------------------------------
