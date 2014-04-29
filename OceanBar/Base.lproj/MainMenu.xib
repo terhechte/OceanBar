@@ -669,32 +669,32 @@
         <window title="OceanBar Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="Preferences" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="480" height="360"/>
+            <rect key="contentRect" x="335" y="390" width="480" height="356"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1366" height="746"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
+                <rect key="frame" x="0.0" y="0.0" width="480" height="356"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box autoresizesSubviews="NO" fixedFrame="YES" title="Digital Ocean Account" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="vbV-zk-hIB">
-                        <rect key="frame" x="17" y="24" width="446" height="132"/>
+                        <rect key="frame" x="17" y="20" width="446" height="132"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <view key="contentView">
                             <rect key="frame" x="1" y="1" width="444" height="116"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RWe-2d-Tx3">
-                                    <rect key="frame" x="16" y="82" width="161" height="17"/>
+                                    <rect key="frame" x="16" y="82" width="130" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="API Key:" id="ioe-a7-tgG">
+                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Client ID:" id="ioe-a7-tgG">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJP-2e-0e8">
-                                    <rect key="frame" x="16" y="52" width="161" height="17"/>
+                                    <rect key="frame" x="16" y="52" width="130" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="API Secret:" id="JmA-BE-8Mx">
+                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="API Key:" id="JmA-BE-8Mx">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -708,6 +708,9 @@
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
+                                    <connections>
+                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.doAPIKey" id="Obj-sq-BrS"/>
+                                    </connections>
                                 </textField>
                                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VtU-3r-qA0">
                                     <rect key="frame" x="152" y="49" width="274" height="22"/>
@@ -717,6 +720,9 @@
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
+                                    <connections>
+                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.doAPISecret" id="h9q-GS-fcg"/>
+                                    </connections>
                                 </textField>
                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IAU-eK-nT2">
                                     <rect key="frame" x="350" y="6" width="82" height="32"/>
@@ -725,14 +731,45 @@
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
+                                    <connections>
+                                        <action selector="testDigitalOceanKeys:" target="Voe-Tx-rLC" id="SVm-BQ-REo"/>
+                                    </connections>
                                 </button>
+                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uZF-sL-k4M">
+                                    <rect key="frame" x="12" y="6" width="162" height="32"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <buttonCell key="cell" type="push" title="Find these Values" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ogV-u4-gCq">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="goDigitalOceanKeys:" target="Voe-Tx-rLC" id="QXl-N8-jmM"/>
+                                    </connections>
+                                </button>
+                                <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="spA-lp-Y1S">
+                                    <rect key="frame" x="174" y="16" width="176" height="17"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Error Message" id="XLm-Fe-qaC">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" red="1" green="0.0" blue="0.058871576398182413" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <binding destination="Voe-Tx-rLC" name="hidden" keyPath="self.testCredentialError" id="NZX-J9-QDI">
+                                            <dictionary key="options">
+                                                <string key="NSValueTransformerName">NSIsNil</string>
+                                            </dictionary>
+                                        </binding>
+                                        <binding destination="Voe-Tx-rLC" name="value" keyPath="self.testCredentialError" id="6Ea-DX-y5c"/>
+                                    </connections>
+                                </textField>
                             </subviews>
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </box>
                     <box autoresizesSubviews="NO" fixedFrame="YES" title="Behaviour" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="Tdi-Gm-qAU">
-                        <rect key="frame" x="17" y="172" width="446" height="168"/>
+                        <rect key="frame" x="17" y="168" width="446" height="168"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <view key="contentView">
                             <rect key="frame" x="1" y="1" width="444" height="152"/>
@@ -751,24 +788,25 @@
                                     <rect key="frame" x="355" y="125" width="41" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="1m" id="o7b-IE-nd4">
+                                        <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#m" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="309" id="vGR-Lp-AXU"/>
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                     <connections>
-                                        <binding destination="R31-N0-UdU" name="displayPatternValue1" keyPath="values.reloadInterval" id="MUf-wB-caZ">
-                                            <dictionary key="options">
-                                                <string key="NSDisplayPattern">%{value1}@m</string>
-                                            </dictionary>
-                                        </binding>
+                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.reloadInterval" id="8vF-07-Eda"/>
                                     </connections>
                                 </textField>
                                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PBT-5a-cqm">
                                     <rect key="frame" x="144" y="123" width="196" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <sliderCell key="cell" state="on" alignment="left" minValue="1" maxValue="60" doubleValue="2" tickMarkPosition="above" sliderType="linear" id="hsd-1c-59z"/>
+                                    <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="1" maxValue="60" doubleValue="2" tickMarkPosition="above" sliderType="linear" id="hsd-1c-59z"/>
                                     <connections>
-                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.reloadInterval" id="qHs-tH-LUk"/>
+                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.reloadInterval" id="mQM-jI-N2U">
+                                            <dictionary key="options">
+                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                            </dictionary>
+                                        </binding>
                                     </connections>
                                 </slider>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NVX-O5-5YC">
