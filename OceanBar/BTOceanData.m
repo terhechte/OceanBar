@@ -15,6 +15,11 @@
 
 @end
 
+// small macro to convert NSNull or Nil to a default value
+#define defau(c, d) (c == [NSNull null] || c == nil ? d : c)
+// convert NSNull to nil
+#define nu2ni(c) (c == [NSNull null] ? nil : c)
+
 @implementation BTOceanDataItem
 
 - (id) initWithDictionary:(NSDictionary *)otherDictionary {
@@ -25,8 +30,12 @@
     return self;
 }
 
+- (NSDictionary*) data {
+    return _storage;
+}
+
 - (id)objectForKeyedSubscript:(id <NSCopying>)key {
-    return [_storage objectForKey:key];
+    return nu2ni([_storage objectForKey:key]);
 }
 
 - (NSNumber*) identifier {
@@ -34,11 +43,11 @@
 }
 
 - (NSString*) name {
-    return self[@"name"];
+    return defau(self[@"name"], @"");
 }
 
 - (NSString*) slug {
-    return self[@"slug"];
+    return defau(self[@"slug"], @"");
 }
 
 @end
@@ -149,7 +158,7 @@
                      createClass:@"BTOceanDataSize"
                      propertyKey:@"sizes"
                     successBlock:^(NSDictionary* results) {
-                        _regions = results;
+                        _sizes = results;
                     } failBlock:^(NSError *error) {
                         NSLog(@"Error: %@", error);
                         errorBlock(error);
@@ -217,9 +226,11 @@
         
         // Never know what we get back in JSON
         if (![responseObject isKindOfClass:[NSDictionary class]]) {
-            failBlock(errorFor(1, $p(@"Error: ImageData is '%@ class'", [responseObject className]), @"OceanData"));
+            failBlock(errorFor(1, $p(@"Error: Data is '%@ class'", [responseObject className]), @"OceanData"));
             return;
         }
+        
+        NSLog(@"%@", responseObject);
         
         if (![[(NSDictionary*)responseObject objectForKey:@"status"] isEqualToString:@"OK"]) {
             failBlock(errorFor(1, $p(@"Status not 'OK' for '%@'", propertyKey), @"OceanData"));
