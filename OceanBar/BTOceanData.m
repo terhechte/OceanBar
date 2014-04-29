@@ -135,7 +135,9 @@
 @implementation BTOceanData
 
 - (NSString*) authURLString {
-    return $p(@"?client_id=%@&api_key=%@", DIGITALOCEAN_CLIENT_ID, DIGITALOCEAN_API_KEY);
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return $p(@"?client_id=%@&api_key=%@", [defaults objectForKey:@"doAPIKey"],
+              [defaults objectForKey:@"doAPISecret"]);
 }
 
 - (NSString*) dropletURLString {
@@ -223,12 +225,43 @@
                                  waitUntilFinished:NO];
 }
 
-- (void) rebootDroplet:(BTOceanDataDroplet*)droplet {
-    
+- (void) testCredentialsWithSuccess:(BTOceanDataAction)actionBlock error:(BTOceanDataError)errorBlock {
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:[self regionURLString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        actionBlock(nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        errorBlock(error);
+    }];
 }
 
-- (void) shutdownDroplet:(BTOceanDataDroplet*)droplet {
-    
+- (void) rebootDroplet:(BTOceanDataDroplet*)droplet finishAction:(BTOceanDataAction)finishBlock {
+    NSString *rebootPath = $p(@"%@/droplets/%@/reboot/%@", DIGITALOCEAN_BASE_URL, droplet.identifier, [self authURLString]);
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:rebootPath parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self postNotification:NSLocalizedString(@"Success", @"notifiction when rebooting a droplet. title")
+                      subtitle:$p(NSLocalizedString(@"Droplet %@ successfully rebooted", @"Notification when rebooting a droplet. subtitle"),
+                                  droplet.name)];
+        finishBlock(nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self postNotification:NSLocalizedString(@"Failure", @"notifiction when rebooting a droplet. title")
+                      subtitle:$p(NSLocalizedString(@"Droplet %@ failed to reboot", @"Notification when rebooting a droplet. subtitle"),
+                                  droplet.name)];
+    }];
+}
+
+- (void) shutdownDroplet:(BTOceanDataDroplet*)droplet finishAction:(BTOceanDataAction)finishBlock {
+    NSString *shutdownPath = $p(@"%@/droplets/%@/power_cycle/%@", DIGITALOCEAN_BASE_URL, droplet.identifier, [self authURLString]);
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:shutdownPath parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self postNotification:NSLocalizedString(@"Success", @"notifiction when shutting down a droplet. title")
+                      subtitle:$p(NSLocalizedString(@"Droplet %@ successfully shut down", @"Notification when shutting down a droplet. subtitle"),
+                                  droplet.name)];
+        finishBlock(nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self postNotification:NSLocalizedString(@"Failure", @"notifiction when shutting down a droplet. title")
+                      subtitle:$p(NSLocalizedString(@"Droplet %@ failed to shut down", @"Notification when shutting down a droplet. subtitle"),
+                                  droplet.name)];
+    }];
 }
 
 - (AFHTTPRequestOperation*) requestOperationFor:(NSString*)urlString
@@ -267,6 +300,17 @@
     }];
     
     return op;
+}
+
+- (void) postNotification:(NSString*)title subtitle:(NSString*)subtitle {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults boolForKey:@"postNotificationCenter"]) {
+        NSUserNotification *notification = [[NSUserNotification alloc] init];
+        notification.title = title;
+        notification.subtitle = subtitle;
+        [[NSUserNotificationCenter defaultUserNotificationCenter]
+         scheduleNotification:notification];
+    }
 }
 
 @end

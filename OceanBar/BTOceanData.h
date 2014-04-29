@@ -55,8 +55,9 @@ typedef void (^BTOceanDataError)(NSError *error);
 
 @interface BTOceanData : NSObject
 - (BTOceanDataDroplet*) dropletForID:(NSNumber*)dropletId;
+- (void) testCredentialsWithSuccess:(BTOceanDataAction)action error:(BTOceanDataError)error;
 - (void) loadDropletsWithSuccess:(BTOceanDataAction)actionBlock failure:(BTOceanDataError)errorBlock;
-- (void) rebootDroplet:(BTOceanDataDroplet*)droplet;
-- (void) shutdownDroplet:(BTOceanDataDroplet*)droplet;
+- (void) shutdownDroplet:(BTOceanDataDroplet*)droplet finishAction:(BTOceanDataAction)finishBlock;
+- (void) rebootDroplet:(BTOceanDataDroplet*)droplet finishAction:(BTOceanDataAction)finishBlock;
 @end
 
