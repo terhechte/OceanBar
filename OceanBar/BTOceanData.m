@@ -88,6 +88,10 @@
 
 @implementation BTOceanDataDroplet
 
+- (bool) isActive {
+    return [self[@"status"] isEqualToString:@"active"];
+}
+
 - (bool) backupsActive {
     return [self[@"backups_active"] boolValue];
 }
@@ -124,6 +128,7 @@
     NSDictionary *_images;
     NSDictionary *_regions;
     NSDictionary *_sizes;
+    NSDictionary *_droplets;
 }
 @end
 
@@ -147,6 +152,10 @@
 
 - (NSString*) sizeURLString {
     return $p(@"%@/sizes/%@", DIGITALOCEAN_BASE_URL, [self authURLString]);
+}
+
+- (BTOceanDataDroplet*) dropletForID:(NSNumber*)dropletId {
+    return _droplets[dropletId];
 }
 
 - (void) loadDropletsWithSuccess:(BTOceanDataAction)actionBlock failure:(BTOceanDataError)errorBlock {
@@ -191,6 +200,8 @@
                      createClass:@"BTOceanDataDroplet"
                      propertyKey:@"droplets"
                     successBlock:^(NSDictionary* results) {
+                        _droplets = results;
+                        
                         // add regions and images
                         for (BTOceanDataDroplet *droplet in [results allValues]) {
                             droplet.region = _regions[droplet[@"region_id"]];
@@ -212,6 +223,14 @@
                                  waitUntilFinished:NO];
 }
 
+- (void) rebootDroplet:(BTOceanDataDroplet*)droplet {
+    
+}
+
+- (void) shutdownDroplet:(BTOceanDataDroplet*)droplet {
+    
+}
+
 - (AFHTTPRequestOperation*) requestOperationFor:(NSString*)urlString
                     createClass:(NSString*)createClass
                     propertyKey:(NSString*)propertyKey
@@ -229,8 +248,6 @@
             failBlock(errorFor(1, $p(@"Error: Data is '%@ class'", [responseObject className]), @"OceanData"));
             return;
         }
-        
-        NSLog(@"%@", responseObject);
         
         if (![[(NSDictionary*)responseObject objectForKey:@"status"] isEqualToString:@"OK"]) {
             failBlock(errorFor(1, $p(@"Status not 'OK' for '%@'", propertyKey), @"OceanData"));

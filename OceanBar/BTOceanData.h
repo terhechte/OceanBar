@@ -44,6 +44,7 @@ typedef void (^BTOceanDataError)(NSError *error);
 @property (retain) BTOceanDataSize *size;
 @property (retain) BTOceanDataRegion *region;
 @property (retain) BTOceanDataImage *image;
+- (bool) isActive;
 - (bool) backupsActive;
 - (NSString*) ipAddress;
 - (NSString*) privateIpAddress;
@@ -53,6 +54,9 @@ typedef void (^BTOceanDataError)(NSError *error);
 @end
 
 @interface BTOceanData : NSObject
+- (BTOceanDataDroplet*) dropletForID:(NSNumber*)dropletId;
 - (void) loadDropletsWithSuccess:(BTOceanDataAction)actionBlock failure:(BTOceanDataError)errorBlock;
+- (void) rebootDroplet:(BTOceanDataDroplet*)droplet;
+- (void) shutdownDroplet:(BTOceanDataDroplet*)droplet;
 @end
 
