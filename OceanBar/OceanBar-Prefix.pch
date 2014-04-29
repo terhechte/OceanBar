@@ -5,5 +5,45 @@
 //
 
 #ifdef __OBJC__
-    #import <Cocoa/Cocoa.h>
+#import <Cocoa/Cocoa.h>
+#import "BTOceanData.h"
+
+//-----------------------------------------------------------------------------
+#pragma mark Digital Ocean Setup
+//-----------------------------------------------------------------------------
+
+#define DIGITALOCEAN_BASE_URL @"https://api.digitalocean.com"
+
+//-----------------------------------------------------------------------------
+#pragma mark Preferences User Defaults Keys
+//-----------------------------------------------------------------------------
+#define kPreferenceReloadIntervalKey @"preferenceReloadInterval";
+
+//-----------------------------------------------------------------------------
+#pragma mark Macros
+//-----------------------------------------------------------------------------
+
+// shorthand format string macro
+#define $p(...) [NSString stringWithFormat: __VA_ARGS__]
+
+//-----------------------------------------------------------------------------
+#pragma mark Static Functions
+//-----------------------------------------------------------------------------
+
+static NSError* errorFor(int code, NSString *message, NSString *domain);
+static NSError* errorFor(int code, NSString *message, NSString *domain) {
+    NSError *underlyingError = [[NSError alloc] initWithDomain:NSCocoaErrorDomain
+                                                          code:errno userInfo:nil];
+    // Create and return the custom domain error.
+    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : message,
+                                       NSUnderlyingErrorKey : underlyingError};
+    
+    NSError *anError = [[NSError alloc] initWithDomain:domain
+                                                  code:code
+                                              userInfo:errorDictionary];
+    
+    return anError;
+}
+
+
 #endif
