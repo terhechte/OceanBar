@@ -102,12 +102,13 @@ const NSUInteger kReloadDelay = 10;
 }
 
 - (void) setupStatusbarItemWithDroplets:(NSArray*)droplets {
-    self.mainStatusbarItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
-    //[self.menuBarStatusItem setMenu:self.menuBarMenu];
-    [self.mainStatusbarItem setEnabled: YES];
-    
-    //let it highlight when the user activates it
-    [self.mainStatusbarItem setHighlightMode:YES];
+    if (!self.mainStatusbarItem) {
+        self.mainStatusbarItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
+        [self.mainStatusbarItem setEnabled: YES];
+        
+        //let it highlight when the user activates it
+        [self.mainStatusbarItem setHighlightMode:YES];
+    }
     
     [self.mainStatusbarItem setMenu: [self mainMenuForDroplets:droplets]];
     
