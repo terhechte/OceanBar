@@ -49,13 +49,10 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
                           otherButton:nil
             informativeTextWithFormat:NSLocalizedString(@"For this app to work, you have to get the Client ID and generate the Digital Ocean API Key in the Digital Ocean Console. Then, you can enter the keys in here.", @"First Start Popup")];
         
-        // Display the alert sheet
         [alert beginSheetModalForWindow:self.window
-                      completionHandler:^(NSModalResponse returnCode) {
-                          if (returnCode == 1) {
-                              [self goDigitalOceanKeys:self];
-                          }
-                      }];
+                          modalDelegate:self
+                         didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
+                            contextInfo:nil];
     }
     
     self.statusBarController = [[BTStatusbarController alloc] init];
@@ -63,6 +60,12 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
     
     if (![d boolForKey:@"hideFromDock"]) {
         [self showDockIcon];
+    }
+}
+
+- (void) alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(int *) contextInfo {
+    if (returnCode == 1) {
+        [self goDigitalOceanKeys:self];
     }
 }
 
