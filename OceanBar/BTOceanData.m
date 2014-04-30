@@ -293,7 +293,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:shutdownPath parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [self postNotification:NSLocalizedString(@"Success", @"notification for droplet aciton")
-                      subtitle:$p(NSLocalizedString(@"Droplet %@ successful: %@", @"Notification for droplet action"),
+                      subtitle:$p(NSLocalizedString(@"Droplet '%@' action successful: %@", @"Notification for droplet action"),
                                   droplet.name, verb)];
         finishBlock(nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
