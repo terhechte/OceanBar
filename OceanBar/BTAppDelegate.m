@@ -100,6 +100,7 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
 - (void) showDockIcon {
     // currently deactivated, there's nothing in the main menu that would
     // make this functionality any useful...
+    return;
     //http://stackoverflow.com/questions/620841/how-to-hide-the-dock-icon
     ProcessSerialNumber psn = { 0, kCurrentProcess };
     TransformProcessType(&psn, kProcessTransformToForegroundApplication);
