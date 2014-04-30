@@ -24,6 +24,22 @@ I'm planning to add more features to this app (as listed below) but for now it s
 
 [[screenshot2.jpeg]]
 
+** Installation
+
+You'll need [[http://cocoapods.org/][CocoaPods]] to compile this project:
+1. Checkout the repository
+2. Jump into a terminal and go into the directory
+3. Run 
+#+BEGIN_SRC bash
+pod install
+#+END_SRC
+4. Open 'OceanBar.xcworkspace' in Xcode
+5. Compile, Run & Success
+   
+** Mac App Store Installation
+
+I just submitted a copy of this App to the Mac App Store. It will be free. So if you don't want to mess with installing Xcode and whatnot, just bookmark this repo and as soon as I get confirmation from Apple that the App has been reviewed / released, I will update this Readme with a link to the App on the App Store.
+
 * Todo
 - [ ] Add functionality to snapshot machines
 - [ ] Add functionality to restore machines from snapshots
