@@ -1,0 +1,38 @@
+* OceanBar
+** A Mac OS X Digital Ocean Client
+   
+This is a Mac OS X Client for the Digital Ocean API
+It should be compatible with 10.9 and 10.8. Maybe even 10.7, but I don't have 10.7 machines for testing anymore.
+
+** Features
+
+- [X] Menubar App
+- [X] List active and inactive machines
+- [X] Power Cycle, Shutdown, Reboot, Power Off/On and Destroy machines
+- [X] Open machines ip addresses in the browser on various ports.
+- [X] Get notification for changes in the Notification Center
+- [X] Define reload interval in the preferences
+- [X] Prepared for localization
+  
+I know that there're by now other Digital Ocean Menubar apps for the Mac, but I had already half finished this one when the first other apps were released, and since I was quite happy with the data model I decided to just continue along the path and add some more functions.
+
+I'm planning to add more features to this app (as listed below) but for now it supports all the necessities required to use it as a good digital ocean menubar control.
+
+** Screenshots
+   
+[[screenshot1.jpeg]]
+
+[[screenshot2.jpeg]]
+
+* Todo
+- [ ] Add functionality to snapshot machines
+- [ ] Add functionality to restore machines from snapshots
+- [ ] Figure out why there is no "Image" information for any of my machines
+- [ ] Add support for snapshot / image administration
+- [ ] See if it is possible to list backups / snapshots for machines. This would make it easier to destroy machines as we'd know that we have a snapshot from it.
+- [ ] Localize to other languages (any takers?)
+
+  
+* License
+This code is licensed under the "Eclipse Public License 1.0 (EPL-1.0)"
+http://opensource.org/licenses/eclipse-1.0.php
