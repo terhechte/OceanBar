@@ -820,10 +820,10 @@
                                         <binding destination="R31-N0-UdU" name="value" keyPath="values.postNotificationCenter" id="Suc-9n-qgo"/>
                                     </connections>
                                 </button>
-                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q2Y-bZ-aIr">
-                                    <rect key="frame" x="16" y="54" width="122" height="18"/>
+                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q2Y-bZ-aIr">
+                                    <rect key="frame" x="16" y="54" width="313" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Hide from Dock" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="1aN-kx-dq2">
+                                    <buttonCell key="cell" type="check" title="Hide from Dock (Restart the app after change)" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="1aN-kx-dq2">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
