@@ -25,13 +25,18 @@ NSString * const kIconError = @"notConnected";
 
 NSString * const kIconActive = @"stateActive";
 NSString * const kIconInactive = @"stateInactive";
+NSString * const kIconUpdated = @"stateUpdated";
 
 NSString * const kIconLocked = @"closedLock";
 NSString * const kIconUnlocked = @"openLock";
 
-@interface BTStatusbarController() {
+// how many seconds do we wait before we reload after droplet actions like shutdown etc?
+const NSUInteger kReloadDelay = 10;
+
+@interface BTStatusbarController() <BTOceanDataDelegate, NSMenuDelegate> {
     bool _loading;
     NSString *_loadError;
+    NSArray *_updated;
 }
 @property (retain) NSStatusItem* mainStatusbarItem;
 @property (retain) NSTimer* reloadTimer;
@@ -48,6 +53,7 @@ NSString * const kIconUnlocked = @"openLock";
     self = [super init];
     if (self) {
         self.oceanData = [[BTOceanData alloc] init];
+        self.oceanData.delegate = self;
         
         [self setupStatusbarItemWithDroplets:@[]];
         
@@ -89,12 +95,14 @@ NSString * const kIconUnlocked = @"openLock";
         state = kIconLoading;
     else if (_loadError)
         state = kIconError;
+    else if (_updated)
+        state = kIconNewContent;
     
     [self.mainStatusbarItem setImage:[NSImage imageNamed:state]];
 }
 
 - (void) setupStatusbarItemWithDroplets:(NSArray*)droplets {
-    self.mainStatusbarItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+    self.mainStatusbarItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
     //[self.menuBarStatusItem setMenu:self.menuBarMenu];
     [self.mainStatusbarItem setEnabled: YES];
     
@@ -104,6 +112,8 @@ NSString * const kIconUnlocked = @"openLock";
     [self.mainStatusbarItem setMenu: [self mainMenuForDroplets:droplets]];
     
     [self setIconState];
+    
+    [self.mainStatusbarItem.menu setDelegate:self];
 }
 
 - (void) reloadContents {
@@ -148,12 +158,15 @@ NSString * const kIconUnlocked = @"openLock";
         for (BTOceanDataDroplet* droplet in droplets) {
             NSMenuItem *mainItem = [[NSMenuItem alloc] init];
             [mainItem setTitle:droplet.name];
-            [mainItem setEnabled: [droplet isActive]];
             
             if (droplet.isActive)
                 mainItem.image = [NSImage imageNamed:kIconActive];
             else
                 mainItem.image = [NSImage imageNamed:kIconInactive];
+            
+            if ([_updated containsObject:droplet]) {
+                mainItem.image = [NSImage imageNamed:kIconUpdated];
+            }
             
             NSMenu *subMenu = [self menuForDroplet:droplet];
             [mainItem setSubmenu:subMenu];
@@ -184,6 +197,17 @@ NSString * const kIconUnlocked = @"openLock";
     
     [statusMenu addItem:prefItem];
     
+    [statusMenu addItem:[NSMenuItem separatorItem]];
+    
+    NSMenuItem *refreshItem = [[NSMenuItem alloc]
+                            initWithTitle:NSLocalizedString(@"Refresh", @"main menu")
+                            action:@selector(forceReload)
+                            keyEquivalent:@"r"];
+    refreshItem.target = self;
+    [statusMenu addItem:refreshItem];
+    
+    [statusMenu addItem:[NSMenuItem separatorItem]];
+    
     NSMenuItem *exitItem = [[NSMenuItem alloc]
                             initWithTitle:NSLocalizedString(@"Quit", @"main menu")
                             action:@selector(exit:)
@@ -203,6 +227,8 @@ NSString * const kIconUnlocked = @"openLock";
     
     // The first line is a simple custom view, too
     NSView *headlineView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, kMenuWidth, 35)];
+    
+    // containing the current state as a led
     NSImageView *im = [[NSImageView alloc] initWithFrame:NSMakeRect(10, 9, 16, 16)];
     if (droplet.isActive)
         im.image = [NSImage imageNamed:kIconActive];
@@ -210,12 +236,22 @@ NSString * const kIconUnlocked = @"openLock";
         im.image = [NSImage imageNamed:kIconInactive];
     [headlineView addSubview:im];
     
+    // and the current locked state
+    NSImageView *imLocked = [[NSImageView alloc] initWithFrame:NSMakeRect(30, 9, 16, 16)];
+    if (droplet.locked)
+        imLocked.image = [NSImage imageNamed:kIconLocked];
+    else
+        imLocked.image = [NSImage imageNamed:kIconUnlocked];
+    [headlineView addSubview:imLocked];
+    
+    // the label with the active status
     NSTextField *labelField = [[NSTextField alloc] initWithFrame:
-                               NSMakeRect(40, 5, 80, 20)];
+                               NSMakeRect(60, 5, 80, 20)];
     [labelField setBordered:NO];
     [labelField setEditable:NO];
     [labelField setStringValue:droplet.status];
     
+    // the open button
     NSButton *openButton = [[NSButton alloc]
                             initWithFrame:NSMakeRect(kMenuWidth - 70, 4, 60, 25)];
     openButton.title = NSLocalizedString(@"Open...", @"info box");
@@ -293,32 +329,55 @@ NSString * const kIconUnlocked = @"openLock";
     [dropletMenu addItem:[NSMenuItem separatorItem]];
     
     // Several Actions to perform on the droplet
-    NSMenuItem *rebootItem =
-    [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Reboot", @"info box")
-                               action:@selector(rebootDroplet:)
-                        keyEquivalent:@"r"];
-    rebootItem.target = self;
-    rebootItem.representedObject = droplet;
-    rebootItem.image = [NSImage imageNamed:NSImageNameRefreshFreestandingTemplate];
-    [dropletMenu addItem:rebootItem];
+    if (droplet.isActive) {
+        
+        [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Shutdown", @"info box")
+                                           action:@selector(shutdownDroplet:)
+                                              key:@"s" droplet:droplet]];
+        
+        [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Reboot", @"info box")
+                                           action:@selector(rebootDroplet:)
+                                              key:@"r" droplet:droplet]];
+        
+        
+        [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Power Cycle", @"info box")
+                                           action:@selector(powerCycleDroplet:)
+                                              key:@"" droplet:droplet]];
+        
+        [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Power Off", @"info box")
+                                           action:@selector(powerOffDroplet:)
+                                              key:@"" droplet:droplet]];
+    } else {
+        [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Power On", @"info box")
+                                           action:@selector(powerOnDroplet:)
+                                              key:@"" droplet:droplet]];
+    }
+
+    [dropletMenu addItem:[NSMenuItem separatorItem]];
     
-    NSMenuItem *shutdownItem =
-    [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Shutdown", @"info box")
-                               action:@selector(shutdownDroplet:)
-                        keyEquivalent:@"s"];
-    shutdownItem.target = self;
-    shutdownItem.representedObject = droplet;
-    shutdownItem.image = [NSImage imageNamed:NSImageNameStopProgressTemplate];
-    [dropletMenu addItem:shutdownItem];
+    [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Destroy!", @"info box")
+                                       action:@selector(destroyDroplet:)
+                                          key:@"" droplet:droplet]];
+    
+    [dropletMenu addItem:[NSMenuItem separatorItem]];
     
     NSMenuItem *openItem = [[NSMenuItem alloc] init];
     openItem.title = NSLocalizedString(@"Open on Port...", @"info box");
     openItem.submenu = [self listOfPortsForDroplet:droplet];
-    openItem.image = [NSImage imageNamed:NSImageNameRightFacingTriangleTemplate];
     [dropletMenu addItem:openItem];
     
     
     return dropletMenu;
+}
+
+- (NSMenuItem*) actionMenuItem:(NSString*)title action:(SEL)action key:(NSString*)k droplet:(BTOceanDataDroplet*)d {
+    NSMenuItem *anItem =
+    [[NSMenuItem alloc] initWithTitle:title
+                               action:action
+                        keyEquivalent:k];
+    anItem.target = self;
+    anItem.representedObject = d;
+    return anItem;
 }
 
 - (NSMenu*) listOfPortsForDroplet:(BTOceanDataDroplet*)droplet {
@@ -366,24 +425,73 @@ NSString * const kIconUnlocked = @"openLock";
 
 - (void) rebootDroplet:(NSMenuItem*) menuItem {
     BTOceanDataDroplet *droplet = menuItem.representedObject;
-    [self confirm:$p(NSLocalizedString(@"Do you really want to reboot '%@'", @"Droplet Action"), droplet.name)
+    [self confirm:$p(NSLocalizedString(@"Do you really want to reboot '%@'?", @"Droplet Action"), droplet.name)
          okButton:NSLocalizedString(@"Yes, reboot it", @"droplet action")
      cancelButton:NSLocalizedString(@"No", @"droplet action")
        withAction:^{
            [self.oceanData rebootDroplet:droplet finishAction:^(id results) {
-               [self forceReload];
+               [self performSelector:@selector(forceReload) withObject:nil afterDelay:kReloadDelay];
            }];
        }];
 }
 
 - (void) shutdownDroplet:(NSMenuItem*) menuItem {
     BTOceanDataDroplet *droplet = menuItem.representedObject;
-    [self confirm:$p(NSLocalizedString(@"Do you really want to shutdown '%@'", @"Droplet Action"), droplet.name)
+    [self confirm:$p(NSLocalizedString(@"Do you really want to shutdown '%@'?", @"Droplet Action"), droplet.name)
          okButton:NSLocalizedString(@"Yes, shut it down", @"droplet action")
      cancelButton:NSLocalizedString(@"No", @"droplet action")
        withAction:^{
            [self.oceanData shutdownDroplet:droplet finishAction:^(id results) {
-               [self forceReload];
+               [self performSelector:@selector(forceReload) withObject:nil afterDelay:kReloadDelay];
+           }];
+       }];
+}
+
+- (void) powerCycleDroplet:(NSMenuItem*) menuItem {
+    BTOceanDataDroplet *droplet = menuItem.representedObject;
+    [self confirm:$p(NSLocalizedString(@"Do you really want to power cycle '%@'?", @"Droplet Action"), droplet.name)
+         okButton:NSLocalizedString(@"Yes, power cycle it", @"droplet action")
+     cancelButton:NSLocalizedString(@"No", @"droplet action")
+       withAction:^{
+           [self.oceanData powercycleDroplet:droplet finishAction:^(id results) {
+               [self performSelector:@selector(forceReload) withObject:nil afterDelay:kReloadDelay];
+           }];
+       }];
+}
+
+
+- (void) powerOffDroplet:(NSMenuItem*) menuItem {
+    BTOceanDataDroplet *droplet = menuItem.representedObject;
+    [self confirm:$p(NSLocalizedString(@"Do you really want to power off '%@'?", @"Droplet Action"), droplet.name)
+         okButton:NSLocalizedString(@"Yes, turn it off", @"droplet action")
+     cancelButton:NSLocalizedString(@"No", @"droplet action")
+       withAction:^{
+           [self.oceanData powerOffDroplet:droplet finishAction:^(id results) {
+               [self performSelector:@selector(forceReload) withObject:nil afterDelay:kReloadDelay];
+           }];
+       }];
+}
+
+- (void) powerOnDroplet:(NSMenuItem*) menuItem {
+    BTOceanDataDroplet *droplet = menuItem.representedObject;
+    [self confirm:$p(NSLocalizedString(@"Do you really want to power on '%@'?", @"Droplet Action"), droplet.name)
+         okButton:NSLocalizedString(@"Yes, turn it on", @"droplet action")
+     cancelButton:NSLocalizedString(@"No", @"droplet action")
+       withAction:^{
+           [self.oceanData powerOnDroplet:droplet finishAction:^(id results) {
+               [self performSelector:@selector(forceReload) withObject:nil afterDelay:kReloadDelay];
+           }];
+       }];
+}
+
+- (void) destroyDroplet:(NSMenuItem*) menuItem {
+    BTOceanDataDroplet *droplet = menuItem.representedObject;
+    [self confirm:$p(NSLocalizedString(@"Do you really want to destroy '%@'? This is not reversible!", @"Droplet Action"), droplet.name)
+         okButton:NSLocalizedString(@"Yes, destroy it", @"droplet action")
+     cancelButton:NSLocalizedString(@"No", @"droplet action")
+       withAction:^{
+           [self.oceanData destroyDroplet:droplet finishAction:^(id results) {
+               [self performSelector:@selector(forceReload) withObject:nil afterDelay:kReloadDelay];
            }];
        }];
 }
@@ -414,6 +522,31 @@ NSString * const kIconUnlocked = @"openLock";
     if (result == 0) {
         action();
     }
+}
+
+//-----------------------------------------------------------------------------
+#pragma mark OceanData Delegate
+//-----------------------------------------------------------------------------
+
+- (void) oceanData:(BTOceanData *)data didFindChangedStateForDroplets:(NSArray *)droplets {
+    // since updated state is ephemeral due to next requests, we have to keep it here.
+    if (droplets.count > 0) {
+        _updated = @[];
+        for (NSDictionary* d in droplets) {
+            _updated = [_updated arrayByAddingObject:d[@"droplet"]];
+        }
+        [self setIconState];
+    }
+}
+
+//-----------------------------------------------------------------------------
+#pragma mark NSMenuDelegate
+//-----------------------------------------------------------------------------
+
+- (void)menuWillOpen:(NSMenu *)menu {
+    // reset the updated flag
+    _updated = nil;
+    [self setIconState];
 }
 
 @end
