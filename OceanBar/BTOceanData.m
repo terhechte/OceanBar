@@ -202,6 +202,36 @@
                      createClass:@"BTOceanDataDroplet"
                      propertyKey:@"droplets"
                     successBlock:^(NSDictionary* results) {
+                        
+                        // calculate if we have a changed state to previously
+                        // but only after the inital import.
+                        if (_droplets &&
+                            ![[self comparisonDictionary:results]
+                            isEqualToDictionary:[self comparisonDictionary:_droplets]]) {
+                            // find the changes
+                            // TODO: Test for more changes than just activity?
+                            NSMutableArray *changedDroplets = @[].mutableCopy;
+                            for (BTOceanDataDroplet *droplet in results.allValues) {
+                                if (!_droplets[droplet.identifier]) {
+                                    [changedDroplets addObject:@{@"change": @"new", @"droplet": droplet}];
+                                    [self postNotification:NSLocalizedString(@"New Droplet", @"If a new droplet appeared")
+                                                  subtitle:$p(NSLocalizedString(@"Found new droplet: %@", @"if a new droplet appeared, subtitle"), droplet.name)];
+                                } else if (![_droplets[droplet.identifier] isActive] == droplet.isActive) {
+                                    [changedDroplets addObject:@{@"change": @"active", @"droplet": droplet}];
+                                    if (droplet.isActive) {
+                                        [self postNotification:NSLocalizedString(@"Droplet Activated", @"If a droplet activated")
+                                                      subtitle:$p(NSLocalizedString(@"Droplet %@ was actived", @"if a droplet acitvated, subtitle"), droplet.name)];
+                                    } else {
+                                        [self postNotification:NSLocalizedString(@"Droplet Deactivated", @"If a droplet deactivated")
+                                                      subtitle:$p(NSLocalizedString(@"Droplet %@ was deactived", @"if a droplet deacitvated, subtitle"), droplet.name)];
+                                    }
+                                }
+                            }
+                            if (self.delegate && [self.delegate conformsToProtocol:@protocol(BTOceanDataDelegate)]) {
+                                [self.delegate oceanData:self didFindChangedStateForDroplets:changedDroplets.copy];
+                            }
+                        }
+                        
                         _droplets = results;
                         
                         // add regions and images
@@ -235,32 +265,41 @@
 }
 
 - (void) rebootDroplet:(BTOceanDataDroplet*)droplet finishAction:(BTOceanDataAction)finishBlock {
-    NSString *rebootPath = $p(@"%@/droplets/%@/reboot/%@", DIGITALOCEAN_BASE_URL, droplet.identifier, [self authURLString]);
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:rebootPath parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self postNotification:NSLocalizedString(@"Success", @"notifiction when rebooting a droplet. title")
-                      subtitle:$p(NSLocalizedString(@"Droplet %@ successfully rebooted", @"Notification when rebooting a droplet. subtitle"),
-                                  droplet.name)];
-        finishBlock(nil);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self postNotification:NSLocalizedString(@"Failure", @"notifiction when rebooting a droplet. title")
-                      subtitle:$p(NSLocalizedString(@"Droplet %@ failed to reboot", @"Notification when rebooting a droplet. subtitle"),
-                                  droplet.name)];
-    }];
+    [self dropletAction:droplet verb:@"Reboot" request:@"reboot" finishAction:finishBlock];
 }
 
 - (void) shutdownDroplet:(BTOceanDataDroplet*)droplet finishAction:(BTOceanDataAction)finishBlock {
-    NSString *shutdownPath = $p(@"%@/droplets/%@/power_cycle/%@", DIGITALOCEAN_BASE_URL, droplet.identifier, [self authURLString]);
+    [self dropletAction:droplet verb:@"Shutdown" request:@"shutdown" finishAction:finishBlock];
+}
+
+- (void) powercycleDroplet:(BTOceanDataDroplet*)droplet finishAction:(BTOceanDataAction)finishBlock {
+    [self dropletAction:droplet verb:@"Power Cycle" request:@"power_cycle" finishAction:finishBlock];
+}
+
+- (void) powerOffDroplet:(BTOceanDataDroplet*)droplet finishAction:(BTOceanDataAction)finishBlock {
+    [self dropletAction:droplet verb:@"Power Off" request:@"power_off" finishAction:finishBlock];
+}
+
+- (void) powerOnDroplet:(BTOceanDataDroplet*)droplet finishAction:(BTOceanDataAction)finishBlock {
+    [self dropletAction:droplet verb:@"Power On" request:@"power_on" finishAction:finishBlock];
+}
+
+- (void) destroyDroplet:(BTOceanDataDroplet*)droplet finishAction:(BTOceanDataAction)finishBlock {
+    [self dropletAction:droplet verb:@"Destroy" request:@"destroy" finishAction:finishBlock];
+}
+
+- (void) dropletAction:(BTOceanDataDroplet*)droplet verb:(NSString*)verb request:(NSString*)request finishAction:(BTOceanDataAction)finishBlock {
+    NSString *shutdownPath = $p(@"%@/droplets/%@/%@/%@", DIGITALOCEAN_BASE_URL, droplet.identifier, request, [self authURLString]);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:shutdownPath parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self postNotification:NSLocalizedString(@"Success", @"notifiction when shutting down a droplet. title")
-                      subtitle:$p(NSLocalizedString(@"Droplet %@ successfully shut down", @"Notification when shutting down a droplet. subtitle"),
-                                  droplet.name)];
+        [self postNotification:NSLocalizedString(@"Success", @"notification for droplet aciton")
+                      subtitle:$p(NSLocalizedString(@"Droplet %@ successful: %@", @"Notification for droplet action"),
+                                  droplet.name, verb)];
         finishBlock(nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self postNotification:NSLocalizedString(@"Failure", @"notifiction when shutting down a droplet. title")
-                      subtitle:$p(NSLocalizedString(@"Droplet %@ failed to shut down", @"Notification when shutting down a droplet. subtitle"),
-                                  droplet.name)];
+        [self postNotification:NSLocalizedString(@"Failure", @"notification title for failed droplet action")
+                      subtitle:$p(NSLocalizedString(@"Droplet %@ failed at: %@", @"notification for failed droplet action"),
+                                  droplet.name, verb)];
     }];
 }
 
@@ -311,6 +350,15 @@
         [[NSUserNotificationCenter defaultUserNotificationCenter]
          scheduleNotification:notification];
     }
+}
+
+- (NSDictionary*) comparisonDictionary:(NSDictionary*)droplets {
+    NSMutableDictionary *dx = @{}.mutableCopy;
+    for (NSString* dropletID in [droplets allKeys]) {
+        BTOceanDataDroplet *droplet = [droplets objectForKey:dropletID];
+        dx[droplet.identifier] = @(droplet.isActive);
+    }
+    return dx.copy;
 }
 
 @end
