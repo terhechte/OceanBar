@@ -2,7 +2,7 @@
 ** A Mac OS X Digital Ocean Client
    
 This is a Mac OS X Client for the Digital Ocean API
-It should be compatible with 10.9 and 10.8. Maybe even 10.7, but I don't have 10.7 machines for testing anymore.
+It is compatible with 10.9. 10.8 support requires switching to AFNetworking 1.X (see todo list).
 
 ** Features
 
@@ -47,6 +47,7 @@ I just submitted a copy of this App to the Mac App Store. It will be free. So if
 - [ ] Add support for snapshot / image administration
 - [ ] See if it is possible to list backups / snapshots for machines. This would make it easier to destroy machines as we'd know that we have a snapshot from it.
 - [ ] Localize to other languages (any takers?)
+- [ ] Port back to AFNetworking 1.X so that it also runs on 10.8. This seems to be the only roadblock for 10.8 compatibility.
 
   
 * License
