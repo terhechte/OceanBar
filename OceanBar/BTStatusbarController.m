@@ -14,6 +14,21 @@ typedef void (^ConfirmationAction)();
 
 const void* kApiCredentialContext = &kApiCredentialContext;
 
+///-----------------------------------------------------------------------------
+#pragma mark Icon Setup
+//-----------------------------------------------------------------------------
+
+NSString * const kIconDefault = @"default";
+NSString * const kIconNewContent = @"newContent";
+NSString * const kIconLoading = @"loading";
+NSString * const kIconError = @"notConnected";
+
+NSString * const kIconActive = @"stateActive";
+NSString * const kIconInactive = @"stateInactive";
+
+NSString * const kIconLocked = @"closedLock";
+NSString * const kIconUnlocked = @"openLock";
+
 @interface BTStatusbarController() {
     bool _loading;
     NSString *_loadError;
@@ -67,22 +82,39 @@ const void* kApiCredentialContext = &kApiCredentialContext;
         [self reloadContents];
 }
 
+- (void) setIconState {
+    NSString *state = kIconDefault;
+    
+    if (_loading)
+        state = kIconLoading;
+    else if (_loadError)
+        state = kIconError;
+    
+    [self.mainStatusbarItem setImage:[NSImage imageNamed:state]];
+}
+
 - (void) setupStatusbarItemWithDroplets:(NSArray*)droplets {
     self.mainStatusbarItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     //[self.menuBarStatusItem setMenu:self.menuBarMenu];
-    [self.mainStatusbarItem setImage:[NSImage imageNamed:@"statusbarIcon1"]];
     [self.mainStatusbarItem setEnabled: YES];
     
     //let it highlight when the user activates it
     [self.mainStatusbarItem setHighlightMode:YES];
     
     [self.mainStatusbarItem setMenu: [self mainMenuForDroplets:droplets]];
+    
+    [self setIconState];
 }
 
 - (void) reloadContents {
     // ignore if the credentials aren't set yet
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([[defaults objectForKey:@"doAPIKey"] length] == 0 || [[defaults objectForKey:@"doAPISecret"] length] == 0)return;
+    if ([[defaults objectForKey:@"doAPIKey"] length] == 0 ||
+        [[defaults objectForKey:@"doAPISecret"] length] == 0) {
+        _loadError = NSLocalizedString(@"Missing Credentials", @"Menu entry if we can't load");
+        [self setupStatusbarItemWithDroplets:@[]];
+        return;
+    }
     
     // sometimes, loading takes time, simple indicator
     _loading = YES;
@@ -117,6 +149,11 @@ const void* kApiCredentialContext = &kApiCredentialContext;
             NSMenuItem *mainItem = [[NSMenuItem alloc] init];
             [mainItem setTitle:droplet.name];
             [mainItem setEnabled: [droplet isActive]];
+            
+            if (droplet.isActive)
+                mainItem.image = [NSImage imageNamed:kIconActive];
+            else
+                mainItem.image = [NSImage imageNamed:kIconInactive];
             
             NSMenu *subMenu = [self menuForDroplet:droplet];
             [mainItem setSubmenu:subMenu];
@@ -167,7 +204,10 @@ const void* kApiCredentialContext = &kApiCredentialContext;
     // The first line is a simple custom view, too
     NSView *headlineView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, kMenuWidth, 35)];
     NSImageView *im = [[NSImageView alloc] initWithFrame:NSMakeRect(10, 9, 16, 16)];
-    im.image = [NSImage imageNamed:@"statusbarIcon1"];
+    if (droplet.isActive)
+        im.image = [NSImage imageNamed:kIconActive];
+    else
+        im.image = [NSImage imageNamed:kIconInactive];
     [headlineView addSubview:im];
     
     NSTextField *labelField = [[NSTextField alloc] initWithFrame:
@@ -259,6 +299,7 @@ const void* kApiCredentialContext = &kApiCredentialContext;
                         keyEquivalent:@"r"];
     rebootItem.target = self;
     rebootItem.representedObject = droplet;
+    rebootItem.image = [NSImage imageNamed:NSImageNameRefreshFreestandingTemplate];
     [dropletMenu addItem:rebootItem];
     
     NSMenuItem *shutdownItem =
@@ -267,11 +308,13 @@ const void* kApiCredentialContext = &kApiCredentialContext;
                         keyEquivalent:@"s"];
     shutdownItem.target = self;
     shutdownItem.representedObject = droplet;
+    shutdownItem.image = [NSImage imageNamed:NSImageNameStopProgressTemplate];
     [dropletMenu addItem:shutdownItem];
     
     NSMenuItem *openItem = [[NSMenuItem alloc] init];
     openItem.title = NSLocalizedString(@"Open on Port...", @"info box");
     openItem.submenu = [self listOfPortsForDroplet:droplet];
+    openItem.image = [NSImage imageNamed:NSImageNameRightFacingTriangleTemplate];
     [dropletMenu addItem:openItem];
     
     
