@@ -253,16 +253,19 @@ const NSUInteger kReloadDelay = 10;
     [labelField setStringValue:droplet.status];
     
     // the open button
-    NSButton *openButton = [[NSButton alloc]
-                            initWithFrame:NSMakeRect(kMenuWidth - 70, 4, 60, 25)];
-    openButton.title = NSLocalizedString(@"Open...", @"info box");
-    [openButton setButtonType:NSMomentaryLightButton];
-    [openButton setBezelStyle:NSTexturedRoundedBezelStyle];
-    [openButton setTarget:self];
-    [openButton setAction:@selector(openDropletAction:)];
-    [openButton setTag: droplet.identifier.integerValue];
+    if (droplet.isActive) {
+        NSButton *openButton = [[NSButton alloc]
+                                initWithFrame:NSMakeRect(kMenuWidth - 70, 4, 60, 25)];
+        openButton.title = NSLocalizedString(@"Open...", @"info box");
+        [openButton setButtonType:NSMomentaryLightButton];
+        [openButton setBezelStyle:NSTexturedRoundedBezelStyle];
+        [openButton setTarget:self];
+        [openButton setAction:@selector(openDropletAction:)];
+        [openButton setTag: droplet.identifier.integerValue];
+        
+        [headlineView addSubview:openButton];
+    }
     
-    [headlineView addSubview:openButton];
     [headlineView addSubview:labelField];
     
     NSMenuItem *activeitem = [[NSMenuItem alloc] init];
@@ -352,21 +355,23 @@ const NSUInteger kReloadDelay = 10;
         [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Power On", @"info box")
                                            action:@selector(powerOnDroplet:)
                                               key:@"" droplet:droplet]];
+        
+        [dropletMenu addItem:[NSMenuItem separatorItem]];
+        
+        [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Destroy!", @"info box")
+                                           action:@selector(destroyDroplet:)
+                                              key:@"" droplet:droplet]];
+    
     }
 
-    [dropletMenu addItem:[NSMenuItem separatorItem]];
-    
-    [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Destroy!", @"info box")
-                                       action:@selector(destroyDroplet:)
-                                          key:@"" droplet:droplet]];
-    
-    [dropletMenu addItem:[NSMenuItem separatorItem]];
-    
-    NSMenuItem *openItem = [[NSMenuItem alloc] init];
-    openItem.title = NSLocalizedString(@"Open on Port...", @"info box");
-    openItem.submenu = [self listOfPortsForDroplet:droplet];
-    [dropletMenu addItem:openItem];
-    
+    if (droplet.isActive) {
+        [dropletMenu addItem:[NSMenuItem separatorItem]];
+        
+        NSMenuItem *openItem = [[NSMenuItem alloc] init];
+        openItem.title = NSLocalizedString(@"Open on Port...", @"info box");
+        openItem.submenu = [self listOfPortsForDroplet:droplet];
+        [dropletMenu addItem:openItem];
+    }
     
     return dropletMenu;
 }
@@ -487,7 +492,7 @@ const NSUInteger kReloadDelay = 10;
 
 - (void) destroyDroplet:(NSMenuItem*) menuItem {
     BTOceanDataDroplet *droplet = menuItem.representedObject;
-    [self confirm:$p(NSLocalizedString(@"Do you really want to destroy '%@'? This is not reversible!", @"Droplet Action"), droplet.name)
+    [self confirm:$p(NSLocalizedString(@"Do you really want to destroy '%@'? This is not reversible! All backups for this droplet will be deleted, too. However Snapshots won't. So if you want to keep the contents of this machine create a Snapshot before destroying it.", @"Droplet Action"), droplet.name)
          okButton:NSLocalizedString(@"Yes, destroy it", @"droplet action")
      cancelButton:NSLocalizedString(@"No", @"droplet action")
        withAction:^{
