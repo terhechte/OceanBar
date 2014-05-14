@@ -709,7 +709,12 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                     <connections>
-                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.doAPIKey" id="Obj-sq-BrS"/>
+                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.doAPIKey" id="8G3-eN-4fX">
+                                            <dictionary key="options">
+                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                            </dictionary>
+                                        </binding>
                                     </connections>
                                 </textField>
                                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VtU-3r-qA0">
@@ -721,7 +726,12 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                     <connections>
-                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.doAPISecret" id="h9q-GS-fcg"/>
+                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.doAPISecret" id="9cg-ax-bg0">
+                                            <dictionary key="options">
+                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                            </dictionary>
+                                        </binding>
                                     </connections>
                                 </textField>
                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IAU-eK-nT2">
@@ -751,16 +761,16 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Error Message" id="XLm-Fe-qaC">
                                         <font key="font" metaFont="system"/>
-                                        <color key="textColor" red="1" green="0.0" blue="0.058871576398182413" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.38008385254285659" green="0.040051028278277667" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                     <connections>
-                                        <binding destination="Voe-Tx-rLC" name="hidden" keyPath="self.testCredentialError" id="NZX-J9-QDI">
+                                        <binding destination="Voe-Tx-rLC" name="hidden" keyPath="self.testCredentialMessage" id="ele-gl-pcV">
                                             <dictionary key="options">
                                                 <string key="NSValueTransformerName">NSIsNil</string>
                                             </dictionary>
                                         </binding>
-                                        <binding destination="Voe-Tx-rLC" name="value" keyPath="self.testCredentialError" id="6Ea-DX-y5c"/>
+                                        <binding destination="Voe-Tx-rLC" name="value" keyPath="self.testCredentialMessage" id="4YG-5H-fKD"/>
                                     </connections>
                                 </textField>
                             </subviews>

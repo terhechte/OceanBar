@@ -11,7 +11,7 @@
 @interface BTAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
-@property (retain) NSString* testCredentialError;
+@property (retain) NSString* testCredentialMessage;
 
 - (IBAction)goDigitalOceanKeys:(id)sender;
 - (IBAction)testDigitalOceanKeys:(id)sender;

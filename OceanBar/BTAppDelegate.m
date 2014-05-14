@@ -81,9 +81,9 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
 - (IBAction)testDigitalOceanKeys:(id)sender {
     BTOceanData *oceanData = [[BTOceanData alloc] init];
     [oceanData testCredentialsWithSuccess:^(id results) {
-        self.testCredentialError = nil;
+        self.testCredentialMessage = NSLocalizedString(@"Login Ok!", @"If the login with data is successful");
     } error:^(NSError *error) {
-        self.testCredentialError = error.localizedDescription;
+        self.testCredentialMessage = error.localizedDescription;
     }];
 }
 
