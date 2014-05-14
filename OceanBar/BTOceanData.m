@@ -89,7 +89,7 @@
 @implementation BTOceanDataDroplet
 
 - (bool) isActive {
-    return [self[@"status"] isEqualToString:@"active"];
+    return [self[@"status"] isEqualToString:@"active"] || [self[@"status"] isEqualToString:@"new"];
 }
 
 - (bool) backupsActive {
