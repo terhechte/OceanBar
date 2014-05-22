@@ -38,14 +38,16 @@ pod install
    
 ** Mac App Store Installation
 
-I just submitted a copy of this App to the Mac App Store. It will be free. So if you don't want to mess with installing Xcode and whatnot, just bookmark this repo and as soon as I get confirmation from Apple that the App has been reviewed / released, I will update this Readme with a link to the App on the App Store.
+This app can be downloaded for free from the Mac App Store:
+https://itunes.apple.com/app/id871852326
+
+So if you don't want to mess with installing Xcode and whatnot, you can just conveniently download the binary from the Mac App Store.
 
 * Todo
 - [ ] Detect it if the internet connection goes away *and* comes back again
 - [x] Filter for additional droplet state: "new", which means - just created
 - [ ] Add functionality to snapshot machines
 - [ ] Add functionality to restore machines from snapshots
-- [ ] Figure out why there is no "Image" information for any of my machines
 - [ ] Add support for snapshot / image administration
 - [ ] See if it is possible to list backups / snapshots for machines. This would make it easier to destroy machines as we'd know that we have a snapshot from it.
 - [ ] Localize to other languages (any takers?)
