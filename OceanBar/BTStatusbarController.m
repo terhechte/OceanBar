@@ -251,6 +251,7 @@ const NSUInteger kReloadDelay = 10;
     [labelField setBordered:NO];
     [labelField setEditable:NO];
     [labelField setStringValue:droplet.status];
+    [labelField setBackgroundColor:[NSColor clearColor]];
     
     // the open button
     if (droplet.isActive) {
