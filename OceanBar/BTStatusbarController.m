@@ -333,6 +333,14 @@ const NSUInteger kReloadDelay = 10;
     
     [dropletMenu addItem:[NSMenuItem separatorItem]];
     
+    [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Copy public IP", @"info box")
+                                       action: @selector(copyDropletPublicIp:)
+                                          key:@"" droplet: droplet]];
+
+    [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Copy private IP", @"info box")
+                                       action: @selector(copyDropletPrivateIp:)
+                                          key:@"" droplet: droplet]];
+
     // Several Actions to perform on the droplet
     if (droplet.isActive) {
         
@@ -428,6 +436,24 @@ const NSUInteger kReloadDelay = 10;
     NSString *urlString = $p(@"http://%@%@", droplet.ipAddress, portString);
     [[NSWorkspace sharedWorkspace]
      openURL:[NSURL URLWithString:urlString]];
+}
+
+- (void) copyDropletPublicIp:(NSMenuItem*) menuItem {
+    BTOceanDataDroplet *droplet = menuItem.representedObject;
+    NSString *ip = droplet.ipAddress;
+    NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+    NSArray *types = [NSArray arrayWithObjects:NSStringPboardType, nil];
+    [pasteboard declareTypes:types owner:self];
+    [pasteboard setString: ip forType:NSStringPboardType];
+}
+
+- (void) copyDropletPrivateIp:(NSMenuItem*) menuItem {
+    BTOceanDataDroplet *droplet = menuItem.representedObject;
+    NSString *ip = droplet.privateIpAddress;
+    NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+    NSArray *types = [NSArray arrayWithObjects:NSStringPboardType, nil];
+    [pasteboard declareTypes:types owner:self];
+    [pasteboard setString: ip forType:NSStringPboardType];
 }
 
 - (void) rebootDroplet:(NSMenuItem*) menuItem {
