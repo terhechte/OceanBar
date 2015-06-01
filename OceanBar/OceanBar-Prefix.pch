@@ -30,8 +30,7 @@
 #pragma mark Static Functions
 //-----------------------------------------------------------------------------
 
-static NSError* errorFor(int code, NSString *message, NSString *domain);
-static NSError* errorFor(int code, NSString *message, NSString *domain) {
+static inline NSError* errorFor(int code, NSString *message, NSString *domain) {
     NSError *underlyingError = [[NSError alloc] initWithDomain:NSCocoaErrorDomain
                                                           code:errno userInfo:nil];
     // Create and return the custom domain error.

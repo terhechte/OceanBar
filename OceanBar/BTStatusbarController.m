@@ -545,12 +545,16 @@ const NSUInteger kReloadDelay = 10;
         okButton:(NSString*)okButton
     cancelButton:(NSString*)cancelButton
       withAction:(ConfirmationAction)action {
+    _Pragma("clang diagnostic push")
+    _Pragma("clang diagnostic ignored \"-Wformat-security\"")
+    _Pragma("clang diagnostic ignored \"-Wformat-nonliteral\"")
     NSAlert *alert =
     [NSAlert alertWithMessageText:NSLocalizedString(@"Confirm", @"action confirmation title")
                     defaultButton:cancelButton
                   alternateButton:okButton
                       otherButton:nil
         informativeTextWithFormat:text];
+    _Pragma("clang diagnostic pop")
     NSUInteger result = [alert runModal];
     if (result == 0) {
         action();
