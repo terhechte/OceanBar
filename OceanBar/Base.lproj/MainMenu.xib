@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="7706"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -10,9 +12,14 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="BTAppDelegate">
             <connections>
+                <outlet property="credentialPasswordField" destination="w2c-XT-F8W" id="rqh-So-lYp"/>
+                <outlet property="credentialUsernameField" destination="qBh-hq-RY9" id="ysS-L5-c9n"/>
+                <outlet property="credentialWindow" destination="lBZ-Bn-TTi" id="Clm-NE-CDH"/>
+                <outlet property="digitalOceanLogin" destination="135-Sb-2rZ" id="kHV-V4-n8B"/>
+                <outlet property="preferencesTabView" destination="9Mk-Y7-TAD" id="Ohg-kb-p8P"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -669,186 +676,247 @@
         <window title="OceanBar Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="Preferences" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="480" height="356"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1366" height="746"/>
+            <rect key="contentRect" x="335" y="390" width="557" height="389"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="356"/>
+                <rect key="frame" x="0.0" y="0.0" width="557" height="389"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <box autoresizesSubviews="NO" fixedFrame="YES" title="Digital Ocean Account" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="vbV-zk-hIB">
-                        <rect key="frame" x="17" y="20" width="446" height="132"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <view key="contentView">
-                            <rect key="frame" x="1" y="1" width="444" height="116"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RWe-2d-Tx3">
-                                    <rect key="frame" x="16" y="82" width="130" height="17"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Client ID:" id="ioe-a7-tgG">
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                </textField>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJP-2e-0e8">
-                                    <rect key="frame" x="16" y="52" width="130" height="17"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="API Key:" id="JmA-BE-8Mx">
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                </textField>
-                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MVI-5x-B3g">
-                                    <rect key="frame" x="152" y="79" width="274" height="22"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="mn0-vU-85P">
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                    <connections>
-                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.doAPIKey" id="8G3-eN-4fX">
-                                            <dictionary key="options">
-                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                                <bool key="NSValidatesImmediately" value="YES"/>
-                                            </dictionary>
-                                        </binding>
-                                    </connections>
-                                </textField>
-                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VtU-3r-qA0">
-                                    <rect key="frame" x="152" y="49" width="274" height="22"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="fjq-xj-tPT">
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                    <connections>
-                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.doAPISecret" id="9cg-ax-bg0">
-                                            <dictionary key="options">
-                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                                <bool key="NSValidatesImmediately" value="YES"/>
-                                            </dictionary>
-                                        </binding>
-                                    </connections>
-                                </textField>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IAU-eK-nT2">
-                                    <rect key="frame" x="350" y="6" width="82" height="32"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="push" title="Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xWf-hZ-FFr">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="testDigitalOceanKeys:" target="Voe-Tx-rLC" id="SVm-BQ-REo"/>
-                                    </connections>
-                                </button>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uZF-sL-k4M">
-                                    <rect key="frame" x="12" y="6" width="162" height="32"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="push" title="Find these Values" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ogV-u4-gCq">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="goDigitalOceanKeys:" target="Voe-Tx-rLC" id="QXl-N8-jmM"/>
-                                    </connections>
-                                </button>
-                                <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="spA-lp-Y1S">
-                                    <rect key="frame" x="174" y="16" width="176" height="17"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Error Message" id="XLm-Fe-qaC">
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" red="0.38008385254285659" green="0.040051028278277667" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                    <connections>
-                                        <binding destination="Voe-Tx-rLC" name="hidden" keyPath="self.testCredentialMessage" id="ele-gl-pcV">
-                                            <dictionary key="options">
-                                                <string key="NSValueTransformerName">NSIsNil</string>
-                                            </dictionary>
-                                        </binding>
-                                        <binding destination="Voe-Tx-rLC" name="value" keyPath="self.testCredentialMessage" id="4YG-5H-fKD"/>
-                                    </connections>
-                                </textField>
-                            </subviews>
-                        </view>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </box>
-                    <box autoresizesSubviews="NO" fixedFrame="YES" title="Behaviour" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="Tdi-Gm-qAU">
-                        <rect key="frame" x="17" y="168" width="446" height="168"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <view key="contentView">
-                            <rect key="frame" x="1" y="1" width="444" height="152"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="64y-92-n3U">
-                                    <rect key="frame" x="16" y="125" width="161" height="17"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Reload Interval:" id="BQH-Hg-CbV">
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                </textField>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9o7-g9-nFn">
-                                    <rect key="frame" x="355" y="125" width="41" height="17"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="1m" id="o7b-IE-nd4">
-                                        <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#m" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="309" id="vGR-Lp-AXU"/>
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                    <connections>
-                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.reloadInterval" id="8vF-07-Eda"/>
-                                    </connections>
-                                </textField>
-                                <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PBT-5a-cqm">
-                                    <rect key="frame" x="144" y="123" width="196" height="21"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="1" maxValue="60" doubleValue="2" tickMarkPosition="above" sliderType="linear" id="hsd-1c-59z"/>
-                                    <connections>
-                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.reloadInterval" id="mQM-jI-N2U">
-                                            <dictionary key="options">
-                                                <bool key="NSValidatesImmediately" value="YES"/>
-                                            </dictionary>
-                                        </binding>
-                                    </connections>
-                                </slider>
-                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NVX-O5-5YC">
-                                    <rect key="frame" x="16" y="87" width="230" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Post errors to Notification Center" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="F0y-sh-glP">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.postNotificationCenter" id="Suc-9n-qgo"/>
-                                    </connections>
-                                </button>
-                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q2Y-bZ-aIr">
-                                    <rect key="frame" x="16" y="54" width="313" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Hide from Dock (Restart the app after change)" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="1aN-kx-dq2">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <binding destination="R31-N0-UdU" name="value" keyPath="values.hideFromDock" id="MdV-sC-MRa"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                        </view>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </box>
+                    <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Mk-Y7-TAD">
+                        <rect key="frame" x="9" y="10" width="535" height="370"/>
+                        <font key="font" metaFont="system"/>
+                        <tabViewItems>
+                            <tabViewItem label="Settings" identifier="1" id="VVF-Dx-032">
+                                <view key="view" id="Q1f-oS-Jja">
+                                    <rect key="frame" x="10" y="33" width="515" height="324"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="64y-92-n3U">
+                                            <rect key="frame" x="15" y="304" width="161" height="17"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Reload Interval:" id="BQH-Hg-CbV">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9o7-g9-nFn">
+                                            <rect key="frame" x="354" y="304" width="41" height="17"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="1m" id="o7b-IE-nd4">
+                                                <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#m" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="309" id="vGR-Lp-AXU"/>
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <binding destination="R31-N0-UdU" name="value" keyPath="values.reloadInterval" id="8vF-07-Eda"/>
+                                            </connections>
+                                        </textField>
+                                        <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PBT-5a-cqm">
+                                            <rect key="frame" x="143" y="302" width="196" height="21"/>
+                                            <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="1" maxValue="60" doubleValue="2" tickMarkPosition="above" sliderType="linear" id="hsd-1c-59z"/>
+                                            <connections>
+                                                <binding destination="R31-N0-UdU" name="value" keyPath="values.reloadInterval" id="mQM-jI-N2U">
+                                                    <dictionary key="options">
+                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </slider>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NVX-O5-5YC">
+                                            <rect key="frame" x="15" y="266" width="230" height="18"/>
+                                            <buttonCell key="cell" type="check" title="Post errors to Notification Center" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="F0y-sh-glP">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <binding destination="R31-N0-UdU" name="value" keyPath="values.postNotificationCenter" id="Suc-9n-qgo"/>
+                                            </connections>
+                                        </button>
+                                        <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q2Y-bZ-aIr">
+                                            <rect key="frame" x="15" y="233" width="313" height="18"/>
+                                            <buttonCell key="cell" type="check" title="Hide from Dock (Restart the app after change)" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="1aN-kx-dq2">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <binding destination="R31-N0-UdU" name="value" keyPath="values.hideFromDock" id="MdV-sC-MRa"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </view>
+                            </tabViewItem>
+                            <tabViewItem label="Account" identifier="2" id="v7f-4d-Mbx">
+                                <view key="view" id="mKh-42-31U">
+                                    <rect key="frame" x="10" y="33" width="139" height="0.0"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YYV-Kq-XGy">
+                                            <rect key="frame" x="216" y="-106" width="75" height="32"/>
+                                            <buttonCell key="cell" type="push" title="Login" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="M5f-XZ-8pf">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="doLoginToDigitalOcean:" target="Voe-Tx-rLC" id="4fN-1y-553"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </view>
+                            </tabViewItem>
+                        </tabViewItems>
+                    </tabView>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="795.5" y="577.5"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="R31-N0-UdU"/>
+        <customObject id="135-Sb-2rZ" customClass="BTDigitalOceanLogin">
+            <connections>
+                <outlet property="approvalSheet" destination="lcU-Y6-sHN" id="REB-gx-iEL"/>
+                <outlet property="approvalWebView" destination="teM-tK-huO" id="n0Q-tv-2bB"/>
+                <outlet property="delegate" destination="Voe-Tx-rLC" id="VEU-29-7v5"/>
+                <outlet property="sheetParentWindow" destination="QvC-M9-y7g" id="hvp-h0-50Q"/>
+            </connections>
+        </customObject>
+        <window title="ApproveSheet" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="lcU-Y6-sHN">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="283" y="305" width="723" height="494"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <view key="contentView" id="515-73-0iB">
+                <rect key="frame" x="0.0" y="-2" width="723" height="494"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <webView translatesAutoresizingMaskIntoConstraints="NO" id="teM-tK-huO">
+                        <rect key="frame" x="0.0" y="0.0" width="723" height="494"/>
+                        <webPreferences key="preferences" defaultFontSize="12" defaultFixedFontSize="12" plugInsEnabled="NO" javaEnabled="NO" javaScriptCanOpenWindowsAutomatically="NO"/>
+                    </webView>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pYA-cb-ugs">
+                        <rect key="frame" x="635" y="456" width="82" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="KI9-Y1-ZQt"/>
+                            <constraint firstAttribute="height" constant="21" id="f1E-mg-JKf"/>
+                        </constraints>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="teN-Bf-R2X">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="teM-tK-huO" secondAttribute="bottom" id="3WP-A0-Sks"/>
+                    <constraint firstAttribute="trailing" secondItem="pYA-cb-ugs" secondAttribute="trailing" constant="12" id="ASn-Os-glj"/>
+                    <constraint firstItem="pYA-cb-ugs" firstAttribute="top" secondItem="515-73-0iB" secondAttribute="top" constant="10" id="Sv3-ki-GtI"/>
+                    <constraint firstAttribute="trailing" secondItem="teM-tK-huO" secondAttribute="trailing" id="oVy-K0-UNI"/>
+                    <constraint firstItem="teM-tK-huO" firstAttribute="top" secondItem="515-73-0iB" secondAttribute="top" id="uf4-lv-Qa3"/>
+                    <constraint firstItem="teM-tK-huO" firstAttribute="leading" secondItem="515-73-0iB" secondAttribute="leading" id="x4Y-KN-7RB"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="464.5" y="416"/>
+        </window>
+        <window title="LoginSheet" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="lBZ-Bn-TTi">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="283" y="305" width="325" height="275"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <view key="contentView" id="5bf-Sf-quf">
+                <rect key="frame" x="0.0" y="0.0" width="325" height="275"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qBh-hq-RY9">
+                        <rect key="frame" x="20" y="171" width="285" height="22"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Username" drawsBackground="YES" id="34r-2B-cLH">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dUY-O5-l9K">
+                        <rect key="frame" x="20" y="237" width="287" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Log in to Digital Ocean" id="QiZ-E6-Ayz">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JLh-sd-ZDz">
+                        <rect key="frame" x="14" y="61" width="75" height="32"/>
+                        <buttonCell key="cell" type="push" title="Login" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NH3-9u-xsO">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="credentialOk:" target="Voe-Tx-rLC" id="uWU-jr-ngq"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ePs-e9-X8H">
+                        <rect key="frame" x="236" y="61" width="83" height="32"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GNO-4N-lSu">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="credentialCancel:" target="Voe-Tx-rLC" id="PlK-A2-7y4"/>
+                        </connections>
+                    </button>
+                    <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="vig-4T-tYB">
+                        <rect key="frame" x="0.0" y="51" width="325" height="5"/>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="system"/>
+                    </box>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cEX-Es-3tR">
+                        <rect key="frame" x="229" y="11" width="90" height="32"/>
+                        <buttonCell key="cell" type="push" title="Sign Up" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pVV-eu-7Sm">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="credentialSignup:" target="Voe-Tx-rLC" id="b9j-Ka-XwA"/>
+                        </connections>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sbL-7e-Hgl">
+                        <rect key="frame" x="20" y="20" width="216" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Account yet? Sign up here:" id="ZFn-bw-tF1">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wjD-C8-IZl">
+                        <rect key="frame" x="20" y="206" width="287" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Error Message" id="hjF-7f-Fb4">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.credentialLoginErrorMessage" id="aNQ-ex-vxY"/>
+                        </connections>
+                    </textField>
+                    <secureTextField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w2c-XT-F8W">
+                        <rect key="frame" x="20" y="121" width="285" height="22"/>
+                        <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="Password" drawsBackground="YES" usesSingleLineMode="YES" id="CdH-Fr-ObD">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            <allowedInputSourceLocales>
+                                <string>NSAllRomanInputSourcesLocaleIdentifier</string>
+                            </allowedInputSourceLocales>
+                        </secureTextFieldCell>
+                    </secureTextField>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="366.5" y="943.5"/>
+        </window>
     </objects>
 </document>

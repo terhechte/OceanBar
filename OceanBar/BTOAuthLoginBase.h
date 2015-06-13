@@ -40,6 +40,15 @@ typedef enum : NSUInteger {
 
 @interface BTOAuthLoginBase : NSObject
 
+/*!
+ @abstract Public Interface
+ */
+- (void) startLoginProcessWithUsername:(NSString*)username password:(NSString*)password;
+
+/*!
+ @abstract Defined by Subclasses
+ */
+
 @property (readonly) NSString *name;
 
 // The URL to be used for authorization

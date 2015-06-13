@@ -7,13 +7,23 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "BTDigitalOceanLogin.h"
 
 @interface BTAppDelegate : NSObject <NSApplicationDelegate>
 
-@property (assign) IBOutlet NSWindow *window;
-@property (retain) NSString* testCredentialMessage;
+@property (weak) IBOutlet BTDigitalOceanLogin *digitalOceanLogin;
+@property (weak) IBOutlet NSTextField *credentialUsernameField;
+@property (weak) IBOutlet NSTextField *credentialPasswordField;
+@property (weak) IBOutlet NSWindow *credentialWindow;
+@property (retain) NSString *credentialLoginErrorMessage;
 
-- (IBAction)goDigitalOceanKeys:(id)sender;
-- (IBAction)testDigitalOceanKeys:(id)sender;
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSTabView *preferencesTabView;
+
+- (IBAction)doLoginToDigitalOcean:(id)sender;
+
+- (IBAction)credentialOk:(id)sender;
+- (IBAction)credentialCancel:(id)sender;
+- (IBAction)credentialSignup:(id)sender;
 
 @end

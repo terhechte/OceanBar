@@ -9,6 +9,7 @@
 #import "BTAppDelegate.h"
 #import "BTStatusbarController.h"
 #import "BTSocialTextView.h"
+#import <NXOAuth2Client/NXOAuth2.h>
 
 NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_access";
 
@@ -24,9 +25,7 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
     
     NSDictionary *defaults = @{@"reloadInterval": @2,
                                @"postNotificationCenter": @YES,
-                               @"hideFromDock": @YES,
-                               @"doAPIKey": @"",
-                               @"doAPISecret": @""};
+                               @"hideFromDock": @YES};
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 	
@@ -37,22 +36,24 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
 	}
     
     // if this is the first start, animate the user to fill in his values
-    if ([[d objectForKey:@"doAPIKey"] length] == 0 ||
-        [[d objectForKey:@"doAPISecret"] length] == 0) {
+    NSArray *accounts = [[NXOAuth2AccountStore sharedStore] accounts];
+    if (accounts.count == 0) {
         // display the preferences window
         [self.window makeKeyAndOrderFront:self];
         
         NSAlert *alert =
-        [NSAlert alertWithMessageText:NSLocalizedString(@"Please Enter your API Keys", @"First Start Popup")
-                        defaultButton:NSLocalizedString(@"Take me there", @"First Start Popup")
-                      alternateButton:NSLocalizedString(@"Ok", @"First Start Popup")
+        [NSAlert alertWithMessageText:NSLocalizedString(@"Please sign in to Digital Ocean", @"First Start Popup")
+                        defaultButton:NSLocalizedString(@"Ok", @"First Start Popup")
+                      alternateButton:nil
                           otherButton:nil
-            informativeTextWithFormat:NSLocalizedString(@"For this app to work, you have to get the Client ID and generate the Digital Ocean API Key in the Digital Ocean Console. Then, you can enter the keys in here.", @"First Start Popup")];
+            informativeTextWithFormat:NSLocalizedString(@"Please sign in to Digital Ocean with your Digital Ocean User account", @"First Start Popup")];
         
         [alert beginSheetModalForWindow:self.window
                           modalDelegate:self
                          didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
                             contextInfo:nil];
+    } else {
+        NSLog(@"accounts: %@", accounts);
     }
     
     self.statusBarController = [[BTStatusbarController alloc] init];
@@ -64,28 +65,45 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
 }
 
 - (void) alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(int *) contextInfo {
-    if (returnCode == 1) {
-        [self goDigitalOceanKeys:self];
+    [self.preferencesTabView selectTabViewItemAtIndex:1];
+    [self doLoginToDigitalOcean:nil];
+}
+
+
+- (IBAction)doLoginToDigitalOcean:(id)sender {
+    [self.window beginSheet:self.credentialWindow
+          completionHandler:nil];
+}
+
+- (IBAction)credentialOk:(id)sender {
+    self.credentialLoginErrorMessage = @"";
+    
+    NSString *username = self.credentialUsernameField.stringValue;
+    NSString *password = self.credentialPasswordField.stringValue;
+    
+    if (username == nil || username.length == 0) {
+        self.credentialLoginErrorMessage = NSLocalizedString(@"Error: Please enter a valid username", nil);
+        return;
     }
+    
+    if (password == nil || password.length == 0) {
+        self.credentialLoginErrorMessage = NSLocalizedString(@"Error: Please enter a valid password", nil);
+        return;
+    }
+    
+    [self.window endSheet:self.credentialWindow];
+    
+    [self.digitalOceanLogin startLoginProcessWithUsername:username password:password];
 }
 
-//-----------------------------------------------------------------------------
-#pragma mark Preferences Actions
-//-----------------------------------------------------------------------------
-
-- (IBAction)goDigitalOceanKeys:(id)sender {
-    [[NSWorkspace sharedWorkspace]
-     openURL:[NSURL URLWithString:kDigitalOceanAPILink]];
+- (IBAction)credentialCancel:(id)sender {
+    [self.window endSheet:self.credentialWindow];
 }
 
-- (IBAction)testDigitalOceanKeys:(id)sender {
-    BTOceanData *oceanData = [[BTOceanData alloc] init];
-    [oceanData testCredentialsWithSuccess:^(id results) {
-        self.testCredentialMessage = NSLocalizedString(@"Login Ok!", @"If the login with data is successful");
-    } error:^(NSError *error) {
-        self.testCredentialMessage = error.localizedDescription;
-    }];
+- (IBAction)credentialSignup:(id)sender {
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://cloud.digitalocean.com/registrations/new"]];
 }
+
 
 //-----------------------------------------------------------------------------
 #pragma mark BTStatusBarControllerDelegate
