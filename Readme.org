@@ -1,5 +1,10 @@
 * OceanBar
 ** A Mac OS X Digital Ocean Client
+
+* Note
+This is currently in a non-working state as I'm transitioning from DigitalOcean API V1 to DigitalOcean API V2
+
+
    
 This is a Mac OS X Client for the Digital Ocean API
 It is compatible with 10.9. 10.8 support requires switching to AFNetworking 1.X (see todo list).
@@ -34,7 +39,8 @@ You'll need [[http://cocoapods.org/][CocoaPods]] to compile this project:
 pod install
 #+END_SRC
 4. Open 'OceanBar.xcworkspace' in Xcode
-5. Compile, Run & Success
+5. Open kDigitalOceanClientKey.h and enter your DigitalOcean Credentials
+6. Compile, Run & Success
    
 ** Mac App Store Installation
 
