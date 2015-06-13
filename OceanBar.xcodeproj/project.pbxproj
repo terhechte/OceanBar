@@ -10,6 +10,7 @@
 		4D31656F1B2C833E0035EA44 /* BTOAuthLoginBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D31656E1B2C833E0035EA44 /* BTOAuthLoginBase.m */; };
 		4D3165711B2C83820035EA44 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D3165701B2C83820035EA44 /* WebKit.framework */; };
 		4D3165741B2C84090035EA44 /* NSString+BTOauthLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3165731B2C84090035EA44 /* NSString+BTOauthLogin.m */; };
+		4D3165771B2C8A410035EA44 /* BTDigitalOceanLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3165761B2C8A410035EA44 /* BTDigitalOceanLogin.m */; };
 		4DC520CF190E94CD00765BA2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DC520CE190E94CD00765BA2 /* Cocoa.framework */; };
 		4DC520D9190E94CD00765BA2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4DC520D7190E94CD00765BA2 /* InfoPlist.strings */; };
 		4DC520DB190E94CD00765BA2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC520DA190E94CD00765BA2 /* main.m */; };
@@ -43,6 +44,9 @@
 		4D3165701B2C83820035EA44 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		4D3165721B2C84090035EA44 /* NSString+BTOauthLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+BTOauthLogin.h"; sourceTree = "<group>"; };
 		4D3165731B2C84090035EA44 /* NSString+BTOauthLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+BTOauthLogin.m"; sourceTree = "<group>"; };
+		4D3165751B2C8A410035EA44 /* BTDigitalOceanLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTDigitalOceanLogin.h; sourceTree = "<group>"; };
+		4D3165761B2C8A410035EA44 /* BTDigitalOceanLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTDigitalOceanLogin.m; sourceTree = "<group>"; };
+		4D3165781B2C8A990035EA44 /* kDigitalOceanClientKey.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kDigitalOceanClientKey.h; sourceTree = "<group>"; };
 		4DAE5FE619115C8800A7C1E0 /* OceanBar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OceanBar.entitlements; sourceTree = "<group>"; };
 		4DC520CB190E94CD00765BA2 /* OceanBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OceanBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DC520CE190E94CD00765BA2 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -164,6 +168,9 @@
 				4D31656E1B2C833E0035EA44 /* BTOAuthLoginBase.m */,
 				4D3165721B2C84090035EA44 /* NSString+BTOauthLogin.h */,
 				4D3165731B2C84090035EA44 /* NSString+BTOauthLogin.m */,
+				4D3165751B2C8A410035EA44 /* BTDigitalOceanLogin.h */,
+				4D3165761B2C8A410035EA44 /* BTDigitalOceanLogin.m */,
+				4D3165781B2C8A990035EA44 /* kDigitalOceanClientKey.h */,
 			);
 			path = OceanBar;
 			sourceTree = "<group>";
@@ -352,6 +359,7 @@
 				4DC520E2190E94CD00765BA2 /* BTAppDelegate.m in Sources */,
 				4DC520DB190E94CD00765BA2 /* main.m in Sources */,
 				4DC8BE69190EDFFF00B250CD /* BTSocialTextView.m in Sources */,
+				4D3165771B2C8A410035EA44 /* BTDigitalOceanLogin.m in Sources */,
 				4DC52108190E9A5200765BA2 /* BTOceanData.m in Sources */,
 				4D31656F1B2C833E0035EA44 /* BTOAuthLoginBase.m in Sources */,
 				4DC52105190E95CD00765BA2 /* BTStatusbarController.m in Sources */,
