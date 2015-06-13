@@ -17,11 +17,14 @@ PODS:
   - AFNetworking/Reachability (2.5.4)
   - AFNetworking/Security (2.5.4)
   - AFNetworking/Serialization (2.5.4)
+  - NXOAuth2Client (1.2.8)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
+  - NXOAuth2Client (~> 1.2.8)
 
 SPEC CHECKSUMS:
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
+  NXOAuth2Client: 98c4d4c594edd2b289cfc34a8928653e1dab7adf
 
-COCOAPODS: 0.37.1
+COCOAPODS: 0.37.2
