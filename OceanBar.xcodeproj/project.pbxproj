@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D31656F1B2C833E0035EA44 /* BTOAuthLoginBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D31656E1B2C833E0035EA44 /* BTOAuthLoginBase.m */; };
+		4D3165711B2C83820035EA44 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D3165701B2C83820035EA44 /* WebKit.framework */; };
+		4D3165741B2C84090035EA44 /* NSString+BTOauthLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3165731B2C84090035EA44 /* NSString+BTOauthLogin.m */; };
 		4DC520CF190E94CD00765BA2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DC520CE190E94CD00765BA2 /* Cocoa.framework */; };
 		4DC520D9190E94CD00765BA2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4DC520D7190E94CD00765BA2 /* InfoPlist.strings */; };
 		4DC520DB190E94CD00765BA2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC520DA190E94CD00765BA2 /* main.m */; };
@@ -35,6 +38,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4D31656D1B2C833E0035EA44 /* BTOAuthLoginBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTOAuthLoginBase.h; sourceTree = "<group>"; };
+		4D31656E1B2C833E0035EA44 /* BTOAuthLoginBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTOAuthLoginBase.m; sourceTree = "<group>"; };
+		4D3165701B2C83820035EA44 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		4D3165721B2C84090035EA44 /* NSString+BTOauthLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+BTOauthLogin.h"; sourceTree = "<group>"; };
+		4D3165731B2C84090035EA44 /* NSString+BTOauthLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+BTOauthLogin.m"; sourceTree = "<group>"; };
 		4DAE5FE619115C8800A7C1E0 /* OceanBar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OceanBar.entitlements; sourceTree = "<group>"; };
 		4DC520CB190E94CD00765BA2 /* OceanBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OceanBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DC520CE190E94CD00765BA2 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -74,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D3165711B2C83820035EA44 /* WebKit.framework in Frameworks */,
 				4DC520CF190E94CD00765BA2 /* Cocoa.framework in Frameworks */,
 				5F85F25E88E14A40A1450941 /* libPods.a in Frameworks */,
 			);
@@ -114,6 +123,7 @@
 		4DC520CD190E94CD00765BA2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4D3165701B2C83820035EA44 /* WebKit.framework */,
 				4DC5210D190E9DE300765BA2 /* Security.framework */,
 				4DC5210B190E9D9500765BA2 /* SystemConfiguration.framework */,
 				4DC52109190E9D2700765BA2 /* libPods-AFNetworking.a */,
@@ -150,6 +160,10 @@
 				4DC52107190E9A5200765BA2 /* BTOceanData.m */,
 				4DC8BE67190EDFFF00B250CD /* BTSocialTextView.h */,
 				4DC8BE68190EDFFF00B250CD /* BTSocialTextView.m */,
+				4D31656D1B2C833E0035EA44 /* BTOAuthLoginBase.h */,
+				4D31656E1B2C833E0035EA44 /* BTOAuthLoginBase.m */,
+				4D3165721B2C84090035EA44 /* NSString+BTOauthLogin.h */,
+				4D3165731B2C84090035EA44 /* NSString+BTOauthLogin.m */,
 			);
 			path = OceanBar;
 			sourceTree = "<group>";
@@ -339,7 +353,9 @@
 				4DC520DB190E94CD00765BA2 /* main.m in Sources */,
 				4DC8BE69190EDFFF00B250CD /* BTSocialTextView.m in Sources */,
 				4DC52108190E9A5200765BA2 /* BTOceanData.m in Sources */,
+				4D31656F1B2C833E0035EA44 /* BTOAuthLoginBase.m in Sources */,
 				4DC52105190E95CD00765BA2 /* BTStatusbarController.m in Sources */,
+				4D3165741B2C84090035EA44 /* NSString+BTOauthLogin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
