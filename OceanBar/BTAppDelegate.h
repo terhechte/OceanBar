@@ -17,6 +17,8 @@
 @property (weak) IBOutlet NSWindow *credentialWindow;
 @property (retain) NSString *credentialLoginErrorMessage;
 
+@property (retain) NSString *currentUserName;
+
 @property (weak) IBOutlet NSWindow *window;
 @property (weak) IBOutlet NSTabView *preferencesTabView;
 

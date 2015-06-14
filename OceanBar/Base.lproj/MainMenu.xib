@@ -674,7 +674,7 @@
             </items>
         </menu>
         <window title="OceanBar Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="Preferences" animationBehavior="default" id="QvC-M9-y7g">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="557" height="389"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
@@ -747,11 +747,29 @@
                             </tabViewItem>
                             <tabViewItem label="Account" identifier="2" id="v7f-4d-Mbx">
                                 <view key="view" id="mKh-42-31U">
-                                    <rect key="frame" x="10" y="33" width="139" height="0.0"/>
+                                    <rect key="frame" x="10" y="33" width="515" height="324"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
+                                        <progressIndicator hidden="YES" fixedFrame="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="Ewe-Oc-QaA">
+                                            <rect key="frame" x="17" y="302" width="481" height="20"/>
+                                        </progressIndicator>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zg5-m5-A9X">
+                                            <rect key="frame" x="17" y="278" width="250" height="17"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Logged in as Carl" id="Z4L-oU-xcX">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <binding destination="Voe-Tx-rLC" name="displayPatternValue1" keyPath="self.currentUserName" id="rG8-V3-I0j">
+                                                    <dictionary key="options">
+                                                        <string key="NSDisplayPattern">Logged in as %{value1}@</string>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YYV-Kq-XGy">
-                                            <rect key="frame" x="216" y="-106" width="75" height="32"/>
+                                            <rect key="frame" x="429" y="266" width="75" height="32"/>
                                             <buttonCell key="cell" type="push" title="Login" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="M5f-XZ-8pf">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -767,11 +785,12 @@
                     </tabView>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="795.5" y="577.5"/>
+            <point key="canvasLocation" x="381.5" y="370.5"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="R31-N0-UdU"/>
         <customObject id="135-Sb-2rZ" customClass="BTDigitalOceanLogin">
             <connections>
+                <outlet property="approvalProgressIndicator" destination="Ewe-Oc-QaA" id="lq2-5o-AT7"/>
                 <outlet property="approvalSheet" destination="lcU-Y6-sHN" id="REB-gx-iEL"/>
                 <outlet property="approvalWebView" destination="teM-tK-huO" id="n0Q-tv-2bB"/>
                 <outlet property="delegate" destination="Voe-Tx-rLC" id="VEU-29-7v5"/>
@@ -789,7 +808,9 @@
                 <subviews>
                     <webView translatesAutoresizingMaskIntoConstraints="NO" id="teM-tK-huO">
                         <rect key="frame" x="0.0" y="0.0" width="723" height="494"/>
-                        <webPreferences key="preferences" defaultFontSize="12" defaultFixedFontSize="12" plugInsEnabled="NO" javaEnabled="NO" javaScriptCanOpenWindowsAutomatically="NO"/>
+                        <webPreferences key="preferences" defaultFontSize="12" defaultFixedFontSize="12" plugInsEnabled="NO" javaEnabled="NO" javaScriptCanOpenWindowsAutomatically="NO">
+                            <nil key="identifier"/>
+                        </webPreferences>
                     </webView>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pYA-cb-ugs">
                         <rect key="frame" x="635" y="456" width="82" height="32"/>
@@ -892,10 +913,10 @@ Gw
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wjD-C8-IZl">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wjD-C8-IZl">
                         <rect key="frame" x="20" y="206" width="287" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Error Message" id="hjF-7f-Fb4">
-                            <font key="font" metaFont="system"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="hjF-7f-Fb4">
+                            <font key="font" metaFont="systemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -905,7 +926,7 @@ Gw
                     </textField>
                     <secureTextField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w2c-XT-F8W">
                         <rect key="frame" x="20" y="121" width="285" height="22"/>
-                        <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="Password" drawsBackground="YES" usesSingleLineMode="YES" id="CdH-Fr-ObD">
+                        <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Password" drawsBackground="YES" usesSingleLineMode="YES" id="CdH-Fr-ObD">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

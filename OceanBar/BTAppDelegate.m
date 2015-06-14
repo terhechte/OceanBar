@@ -54,7 +54,7 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
                             contextInfo:nil];
     } else {
         NXOAuth2Account *ac = accounts.firstObject;
-        NSLog(@"%@", ac);
+        self.currentUserName = [(NSDictionary*)ac.userData objectForKey:@"username"];
     }
     
     self.statusBarController = [[BTStatusbarController alloc] init];
