@@ -163,6 +163,8 @@
         return BTOAuthURLTypeDefault;
     }
     
+    // FIXME: Load these needles from a server, to quickly adopt to HTML changes.
+    
     // Check if it is a login page
     if (stringContainsStrings(@[@"Log in to use your DigitalOcean<br> account with"], htmlContent))
         return BTOAuthURLTypeLoginPage;
@@ -172,6 +174,17 @@
         return BTOAuthURLTypeApprovalPage;
     
     return BTOAuthURLTypeDefault;
+}
+
+- (void) fillCredentials:(NSString*)username password:(NSString*)password intoPage:(WebView*)webView {
+    // FIXME: Load this javascript from a server, to quickly adopt to HTML changes
+    // Insert Username and Password
+    NSString *abc = [NSString stringWithFormat:@"document.getElementById(\"user_email\").value = \"%@\";\
+                     document.getElementById(\"user_password\").value = \"%@\";\
+                     document.getElementById(\"new_user\").submit();", username, password];
+    
+    WebScriptObject *script = [self.approvalWebView windowScriptObject];
+    [script evaluateWebScript:abc];
 }
 
 @end

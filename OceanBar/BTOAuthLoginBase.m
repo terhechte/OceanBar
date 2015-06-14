@@ -143,6 +143,10 @@
     return BTOAuthURLTypeDefault;
 }
 
+- (void) fillCredentials:(NSString*)username password:(NSString*)password intoPage:(WebView*)webView {
+    [NSException raise:NSGenericException format:@"%@: Not Implemented yet", NSStringFromSelector(_cmd)];
+}
+
 #pragma mark -
 #pragma mark ResourceLoadDelegate
 
@@ -184,13 +188,7 @@
     
     // If this is the login page, insert the credentials
     if (_nextStepInsertCredentials && urlType == BTOAuthURLTypeLoginPage) {
-        // Insert Username and Password
-        NSString *abc = [NSString stringWithFormat:@"document.getElementById(\"user_email\").value = \"%@\";\
-                         document.getElementById(\"user_password\").value = \"%@\";\
-                         document.getElementById(\"new_user\").submit();", self.credentialUsername, self.credentialPassword];
-        
-        WebScriptObject *script = [self.approvalWebView windowScriptObject];
-        [script evaluateWebScript:abc];
+        [self fillCredentials:self.credentialUsername password:self.credentialPassword intoPage:self.approvalWebView];
         
         _nextStepInsertCredentials = false;
     }

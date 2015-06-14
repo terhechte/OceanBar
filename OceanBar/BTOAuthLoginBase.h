@@ -73,5 +73,6 @@ typedef enum : NSUInteger {
 
 - (BTOAuthURLType) pageTypeForDataSource:(WebDataSource*)dataSource;
 
+- (void) fillCredentials:(NSString*)username password:(NSString*)password intoPage:(WebView*)webView;
 @end
 
