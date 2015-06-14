@@ -129,4 +129,23 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
  
 }
 
+#pragma mark -
+#pragma mark BTOAuthUserCredentialsProtocol
+
+- (void) loginManagerCredentialsWrong:(id)loginManager {
+    self.credentialLoginErrorMessage = NSLocalizedString(@"Error: Please enter a valid password", nil);
+    [self doLoginToDigitalOcean:nil];
+}
+
+- (void) loginManagerLoginSuccess:(id)loginManager withNewAccount:(NXOAuth2Account*)account {
+    // Set the user data as DO returns nil
+    [account setUserData:@{@"username": self.credentialUsernameField.stringValue}];
+    
+    self.currentUserName = self.credentialUsernameField.stringValue;
+}
+
+- (void) loginManagerLoginFailure:(id)loginManager {
+    
+}
+
 @end

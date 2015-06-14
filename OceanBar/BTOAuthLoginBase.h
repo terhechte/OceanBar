@@ -56,7 +56,7 @@ typedef enum : NSUInteger {
 /*!
  @abstract Will be called when login & approval was successful
  */
-- (void) loginManagerLoginSuccess:(id)loginManager;
+- (void) loginManagerLoginSuccess:(id)loginManager withNewAccount:(id)account;
 /*!
  @abstract Will be called when login or approval failed
  */

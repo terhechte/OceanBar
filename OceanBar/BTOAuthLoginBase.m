@@ -67,7 +67,7 @@
                                                            queue:nil
                                                       usingBlock:^(NSNotification *aNotification){
                                                           if (self.delegate && [self.delegate conformsToProtocol:@protocol(BTOAuthUserCredentialsProtocol)]) {
-                                                              [self.delegate loginManagerLoginSuccess:self];
+                                                              [self.delegate loginManagerLoginSuccess:self withNewAccount:aNotification.userInfo[NXOAuth2AccountStoreNewAccountUserInfoKey]];
                                                           }
                                                       }];
         

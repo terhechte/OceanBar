@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "BTDigitalOceanLogin.h"
 
-@interface BTAppDelegate : NSObject <NSApplicationDelegate>
+@interface BTAppDelegate : NSObject <NSApplicationDelegate, BTOAuthUserCredentialsProtocol>
 
 @property (weak) IBOutlet BTDigitalOceanLogin *digitalOceanLogin;
 @property (weak) IBOutlet NSTextField *credentialUsernameField;
