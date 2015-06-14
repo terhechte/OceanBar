@@ -183,7 +183,7 @@
                      document.getElementById(\"user_password\").value = \"%@\";\
                      document.getElementById(\"new_user\").submit();", username, password];
     
-    WebScriptObject *script = [self.approvalWebView windowScriptObject];
+    WebScriptObject *script = [webView windowScriptObject];
     [script evaluateWebScript:abc];
 }
 
