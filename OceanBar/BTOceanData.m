@@ -8,6 +8,7 @@
 
 #import "BTOceanData.h"
 #import <AFNetworking/AFNetworking.h>
+#import <NXOAuth2Client/NXOAuth2.h>
 
 @interface BTOceanDataItem() {
     NSDictionary *_storage;
@@ -61,9 +62,21 @@
 @end
 
 @implementation BTOceanDataRegion
+- (NSNumber*) identifier {
+    // Sizes don't return an id anymore, only a slug.
+    // thankfully, NSString hash is used for string content identity within an OSX release,
+    // which is sufficient for our temporary use here.
+    return @(self.slug.hash);
+}
 @end
 
 @implementation BTOceanDataSize
+- (NSNumber*) identifier {
+    // Sizes don't return an id anymore, only a slug.
+    // thankfully, NSString hash is used for string content identity within an OSX release,
+    // which is sufficient for our temporary use here.
+    return @(self.slug.hash);
+}
 
 - (NSNumber*) memory {
     return self[@"memory"];
@@ -73,15 +86,15 @@
 }
 
 - (NSNumber*) cpu {
-    return self[@"cpu"];
+    return self[@"vcpus"];
 }
 
 - (NSNumber*) costPerHour {
-    return self[@"cost_per_hour"];
+    return self[@"prize_hourly"];
 }
 
 - (NSNumber*) costPerMonth {
-    return self[@"cost_per_month"];
+    return self[@"price_monthly"];
 }
 
 @end
@@ -93,15 +106,42 @@
 }
 
 - (bool) backupsActive {
-    return [self[@"backups_active"] boolValue];
+    return [self[@"backup_ids"] count] > 0;
+}
+
+- (NSString*) kernelName {
+    return [self.data valueForKeyPath:@"kernel.name"];
+}
+
+- (NSString*) features {
+    return [(NSArray*)self[@"features"] componentsJoinedByString:@", "];
+}
+
+- (NSArray*) queryAddressesFor:(NSString*)type {
+    NSMutableArray *addresses = @[].mutableCopy;
+    for (NSDictionary *item in [self.data valueForKeyPath:@"networks.v4"]) {
+        if ([item[@"type"] isEqualToString:type])
+            [addresses addObject:item[@"ip_address"]];
+    }
+    return addresses.copy;
 }
 
 - (NSString*) ipAddress {
-    return self[@"ip_address"];
+    // return the first public IP
+    return [self queryAddressesFor:@"public"].firstObject;
 }
 
 - (NSString*) privateIpAddress {
-    return self[@"private_ip_address"];
+    // return the first public IP
+    return [self queryAddressesFor:@"private"].firstObject;
+}
+
+- (NSString*) publicIpAddresses {
+    return [[self queryAddressesFor:@"public"] componentsJoinedByString:@", "];
+}
+
+- (NSString*) privateIpAddresses {
+    return [[self queryAddressesFor:@"private"] componentsJoinedByString:@", "];
 }
 
 - (bool) locked {
@@ -134,26 +174,20 @@
 
 @implementation BTOceanData
 
-- (NSString*) authURLString {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    return $p(@"?client_id=%@&api_key=%@", [defaults objectForKey:@"doAPIKey"],
-              [defaults objectForKey:@"doAPISecret"]);
-}
-
 - (NSString*) dropletURLString {
-    return $p(@"%@/droplets/%@", DIGITALOCEAN_BASE_URL, [self authURLString]);
+    return $p(@"%@/droplets", DIGITALOCEAN_BASE_URL);
 }
 
 - (NSString*) regionURLString {
-    return $p(@"%@/regions/%@", DIGITALOCEAN_BASE_URL, [self authURLString]);
+    return $p(@"%@/regions", DIGITALOCEAN_BASE_URL);
 }
 
 - (NSString*) imageURLString {
-    return $p(@"%@/images/%@", DIGITALOCEAN_BASE_URL, [self authURLString]);
+    return $p(@"%@/images", DIGITALOCEAN_BASE_URL);
 }
 
 - (NSString*) sizeURLString {
-    return $p(@"%@/sizes/%@", DIGITALOCEAN_BASE_URL, [self authURLString]);
+    return $p(@"%@/sizes", DIGITALOCEAN_BASE_URL);
 }
 
 - (BTOceanDataDroplet*) dropletForID:(NSNumber*)dropletId {
@@ -255,15 +289,6 @@
                                  waitUntilFinished:NO];
 }
 
-- (void) testCredentialsWithSuccess:(BTOceanDataAction)actionBlock error:(BTOceanDataError)errorBlock {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:[self regionURLString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        actionBlock(nil);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        errorBlock(error);
-    }];
-}
-
 - (void) rebootDroplet:(BTOceanDataDroplet*)droplet finishAction:(BTOceanDataAction)finishBlock {
     [self dropletAction:droplet verb:@"Reboot" request:@"reboot" finishAction:finishBlock];
 }
@@ -289,6 +314,7 @@
 }
 
 - (void) dropletAction:(BTOceanDataDroplet*)droplet verb:(NSString*)verb request:(NSString*)request finishAction:(BTOceanDataAction)finishBlock {
+    /*
     NSString *shutdownPath = $p(@"%@/droplets/%@/%@/%@", DIGITALOCEAN_BASE_URL, droplet.identifier, request, [self authURLString]);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:shutdownPath parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -301,6 +327,7 @@
                       subtitle:$p(NSLocalizedString(@"Droplet %@ failed at: %@", @"notification for failed droplet action"),
                                   droplet.name, verb)];
     }];
+     */
 }
 
 - (AFHTTPRequestOperation*) requestOperationFor:(NSString*)urlString
@@ -309,8 +336,12 @@
                    successBlock:(BTOceanDataAction)success
                       failBlock:(BTOceanDataError)failBlock {
     
+    NSArray *accounts = [[NXOAuth2AccountStore sharedStore] accounts];
+    NXOAuth2Account *account = accounts.firstObject;
+    
     NSURL *URL = [NSURL URLWithString:urlString];
-    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    NSMutableURLRequest *request = [NSURLRequest requestWithURL:URL].mutableCopy;
+    [request setValue:[NSString stringWithFormat:@"Bearer %@", account.accessToken.accessToken] forHTTPHeaderField:@"Authorization"];
     AFHTTPRequestOperation *op = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     op.responseSerializer = [AFJSONResponseSerializer serializer];
     [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -321,15 +352,9 @@
             return;
         }
         
-        if (![[(NSDictionary*)responseObject objectForKey:@"status"] isEqualToString:@"OK"]) {
-            failBlock(errorFor(1, $p(@"Status not 'OK' for '%@'", propertyKey), @"OceanData"));
-            return;
-        }
-        
         NSMutableDictionary *collector = [NSMutableDictionary dictionary];
         for (NSDictionary *aDictionary in responseObject[propertyKey]) {
             BTOceanDataItem *item = [[NSClassFromString(createClass) alloc] initWithDictionary:aDictionary];
-            
             [collector setObject:item forKey:item.identifier];
         }
         

@@ -12,7 +12,7 @@
 #pragma mark Digital Ocean Setup
 //-----------------------------------------------------------------------------
 
-#define DIGITALOCEAN_BASE_URL @"https://api.digitalocean.com"
+#define DIGITALOCEAN_BASE_URL @"https://api.digitalocean.com/v2"
 
 //-----------------------------------------------------------------------------
 #pragma mark Preferences User Defaults Keys

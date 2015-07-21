@@ -284,9 +284,13 @@ const NSUInteger kReloadDelay = 10;
     [dropletTextView addItem:NSLocalizedString(@"Created", @"info box")
                    withValue:[dateFormatter stringFromDate:droplet.createdAt]];
     
-    [dropletTextView addItem:NSLocalizedString(@"IP Address", @"info box") withValue:droplet.ipAddress];
-    if (droplet.privateIpAddress && droplet.privateIpAddress.length > 0)
-        [dropletTextView addItem:NSLocalizedString(@"Private IP", @"info box") withValue:droplet.privateIpAddress];
+    [dropletTextView addItem:NSLocalizedString(@"Public IP", @"info box") withValue:droplet.publicIpAddresses];
+    if (droplet.privateIpAddresses && droplet.privateIpAddresses.length > 0)
+        [dropletTextView addItem:NSLocalizedString(@"Private IP", @"info box") withValue:droplet.privateIpAddresses];
+    
+    [dropletTextView addItem:NSLocalizedString(@"Kernel", @"info box") withValue:droplet.kernelName];
+    
+    [dropletTextView addItem:NSLocalizedString(@"Features", @"info box") withValue:droplet.features];
     
     // Create the Image String:
     if (droplet.image) {
