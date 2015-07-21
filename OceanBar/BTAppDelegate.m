@@ -38,6 +38,9 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
     // if this is the first start, animate the user to fill in his values
     NSArray *accounts = [[NXOAuth2AccountStore sharedStore] accounts];
     if (accounts.count == 0) {
+        
+        self.loginLogoutButton.title = NSLocalizedString(@"Login", @"In the preferences, the button");
+        
         // display the preferences window
         [self.window makeKeyAndOrderFront:self];
         
@@ -55,6 +58,8 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
     } else {
         NXOAuth2Account *ac = accounts.firstObject;
         self.currentUserName = [(NSDictionary*)ac.userData objectForKey:@"username"];
+        
+        self.loginLogoutButton.title = NSLocalizedString(@"Logout", @"In the preferences, the button");
     }
     
     self.statusBarController = [[BTStatusbarController alloc] init];
@@ -72,8 +77,19 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
 
 
 - (IBAction)doLoginToDigitalOcean:(id)sender {
-    [self.window beginSheet:self.credentialWindow
-          completionHandler:nil];
+    NSArray *accounts = [[NXOAuth2AccountStore sharedStore] accounts];
+    if (accounts.count == 0) {
+        // login
+        [self.window beginSheet:self.credentialWindow
+              completionHandler:nil];
+    } else {
+        // logout
+        [[NXOAuth2AccountStore sharedStore]  removeAccount:accounts.firstObject];
+        
+        self.currentUserName = @"";
+        
+        self.loginLogoutButton.title = NSLocalizedString(@"Login", @"In the preferences, the button");
+    }
 }
 
 - (IBAction)credentialOk:(id)sender {

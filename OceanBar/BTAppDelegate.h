@@ -12,6 +12,7 @@
 @interface BTAppDelegate : NSObject <NSApplicationDelegate, BTOAuthUserCredentialsProtocol>
 
 @property (weak) IBOutlet BTDigitalOceanLogin *digitalOceanLogin;
+@property (weak) IBOutlet NSButton *loginLogoutButton;
 @property (weak) IBOutlet NSTextField *credentialUsernameField;
 @property (weak) IBOutlet NSTextField *credentialPasswordField;
 @property (weak) IBOutlet NSWindow *credentialWindow;
