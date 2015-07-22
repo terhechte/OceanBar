@@ -37,11 +37,12 @@
 }
 
 - (void) addLoginParams:(NSMutableDictionary*)params {
-    [params setObject:@"read write" forKey:@"scope"];
-    // Create a random string
     NSMutableString *randString = @"".mutableCopy;
     for (int i=0; i<=16; i++)[randString appendFormat:@"%c", 'a' + arc4random_uniform(20)];
     [params setObject:randString.copy forKey:@"state"];
+}
+- (NSSet*) desiredScope {
+    return [NSSet setWithObjects:@"read", @"write", nil];
 }
 
 - (BTOAuthURLAction) actionForURL:(NSURL*)url orCustomURL:(NSURL**)customURL

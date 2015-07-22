@@ -46,9 +46,11 @@
     if (self) {
         [[NXOAuth2AccountStore sharedStore] setClientID:[self clientID]
                                                  secret:[self clientSecret]
+                                                  scope:[self desiredScope]
                                        authorizationURL:[self authorizationURL]
                                                tokenURL:[self tokenURL]
                                             redirectURL:[self redirectURL]
+                                          keyChainGroup:@"com.stylemac.OceanBar"
                                          forAccountType:[self name]];
         
         // allow the login to modify the configuration
@@ -58,7 +60,7 @@
         if (params.count > 0) {
             NSMutableDictionary *config = [[NXOAuth2AccountStore sharedStore]
                                            configurationForAccountType:[self name]].mutableCopy;
-            [[NXOAuth2AccountStore sharedStore] setConfiguration:config.copy forAccountType:@"DigitalOcean"];
+            [[NXOAuth2AccountStore sharedStore] setConfiguration:config.copy forAccountType:[self name]];
         }
         
         // Make sure we identify succesful loading
@@ -130,6 +132,11 @@
 
 - (void) addLoginParams:(NSMutableDictionary*)params {
     [NSException raise:NSGenericException format:@"%@: Not Implemented yet", NSStringFromSelector(_cmd)];
+}
+
+- (NSSet*) desiredScope {
+    [NSException raise:NSGenericException format:@"%@: Not Implemented yet", NSStringFromSelector(_cmd)];
+    return nil;
 }
 
 - (BTOAuthURLAction) actionForURL:(NSURL*)url orCustomURL:(NSURL**)customURL
