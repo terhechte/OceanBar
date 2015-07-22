@@ -9,6 +9,7 @@
 #import "BTStatusbarController.h"
 #import "BTOceanData.h"
 #import "BTSocialTextView.h"
+#import <NXOAuth2Client/NXOAuth2.h>
 
 typedef void (^ConfirmationAction)();
 
@@ -119,13 +120,14 @@ const NSUInteger kReloadDelay = 10;
 
 - (void) reloadContents {
     // ignore if the credentials aren't set yet
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([[defaults objectForKey:@"doAPIKey"] length] == 0 ||
-        [[defaults objectForKey:@"doAPISecret"] length] == 0) {
-        _loadError = NSLocalizedString(@"Missing Credentials", @"Menu entry if we can't load");
+    NSArray *accounts = [[NXOAuth2AccountStore sharedStore] accounts];
+    if (accounts.count == 0) {
+        _loadError = NSLocalizedString(@"Not logged in", @"Menu entry if we can't load");
         [self setupStatusbarItemWithDroplets:@[]];
         return;
     }
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     // sometimes, loading takes time, simple indicator
     _loading = YES;

@@ -10,6 +10,7 @@
 
 @interface BTStatusbarController : NSObject
 @property (weak) id delegate;
+- (void) reloadContents;
 @end
 
 @protocol BTStatusbarControllerDelegate <NSObject>
