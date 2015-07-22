@@ -25,7 +25,9 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
     
     NSDictionary *defaults = @{@"reloadInterval": @2,
                                @"postNotificationCenter": @YES,
-                               @"hideFromDock": @YES};
+                               @"hideFromDock": @YES,
+                               @"terminalEmulator": @"Terminal",
+                               @"terminalCommand": @"ssh root@{{IPADDRESS}}"};
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 	

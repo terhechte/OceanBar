@@ -366,6 +366,10 @@ const NSUInteger kReloadDelay = 10;
         [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Power Off", @"info box")
                                            action:@selector(powerOffDroplet:)
                                               key:@"" droplet:droplet]];
+        
+        [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Open Terminal", @"info box")
+                                           action:@selector(appleScriptOpenTerminalWithDroplet:)
+                                              key:@"t" droplet:droplet]];
     } else {
         [dropletMenu addItem:[self actionMenuItem:NSLocalizedString(@"Power On", @"info box")
                                            action:@selector(powerOnDroplet:)
@@ -590,6 +594,61 @@ const NSUInteger kReloadDelay = 10;
     // reset the updated flag
     _updated = nil;
     [self setIconState];
+}
+
+//-----------------------------------------------------------------------------
+#pragma mark AppleScript
+//-----------------------------------------------------------------------------
+
+- (void) executeAppleScript:(NSString*)script {
+    NSDictionary *errors = nil;
+    NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
+    NSLog(@"%@", script);
+    [appleScript executeAndReturnError:&errors];
+    if (errors) {
+        NSLog(@"error: %@", errors);
+    }
+}
+
+- (void) appleScriptOpenTerminalWithDroplet:(NSMenuItem*)dropletItem {
+    BTOceanDataDroplet *droplet = dropletItem.representedObject;
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSString *tc = [ud objectForKey:@"terminalCommand"];
+    if (!tc)tc = @"ssh root@{{IPADDRESS}}";
+    
+    NSString *te = [ud objectForKey:@"terminalEmulator"];
+    
+    tc = [tc stringByReplacingOccurrencesOfString:@"{{IPADDRESS}}" withString:droplet.ipAddress];
+    
+    tc = [tc stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    te = [te stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    NSString *cmd = nil;
+    if ([te isEqualToString:@"Terminal"]) {
+        cmd = [self appleScript_terminal:tc];
+    } else if ([te isEqualToString:@"iTerm 2.0"]) {
+        cmd = [self appleScript_iTerm2:tc];
+    } else if ([te isEqualToString:@"iTerm 2.9+"]) {
+        cmd = [self appleScript_iTerm3:tc];
+    }
+    
+    [self executeAppleScript:cmd];
+}
+
+- (NSString*) appleScript_terminal:(NSString*)cmd {
+    NSString *basic = @"tell application \"Terminal\"\ndo script \"%@\"\nactivate\nend tell";
+    return [NSString stringWithFormat:basic, cmd];
+}
+
+- (NSString*) appleScript_iTerm2:(NSString*)cmd {
+    NSString *basic = @"tell application \"iTerm\"\nset myterm to (make new terminal)\ntell myterm\nset mysession to (make new session at the end of sessions)\ntell mysession\nexec command \"%@\"\nend tell\nend tell\nactivate\nend tell";
+    return [NSString stringWithFormat:basic, cmd];
+}
+
+- (NSString*) appleScript_iTerm3:(NSString*)cmd {
+    NSString *basic = @"tell application \"iTerm\"\ncreate window with default profile\ntell current session of current window\nwrite text \"%@\"\nend tell\nactivate\nend tell";
+    return [NSString stringWithFormat:basic, cmd];
 }
 
 @end
