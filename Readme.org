@@ -7,7 +7,7 @@ This is currently in a non-working state as I'm transitioning from DigitalOcean 
 
    
 This is a Mac OS X Client for the Digital Ocean API
-It is compatible with 10.9. 10.8 support requires switching to AFNetworking 1.X (see todo list).
+It is compatible with 10.9+
 
 ** Features
 
@@ -18,6 +18,8 @@ It is compatible with 10.9. 10.8 support requires switching to AFNetworking 1.X 
 - [X] Get notification for changes in the Notification Center
 - [X] Define reload interval in the preferences
 - [X] Prepared for localization
+- [X] Open Terminal Window (Terminal.app/iTerm) for droplet
+- [X] DigitalOcean API 2.0 
   
 I know that there're by now other Digital Ocean Menubar apps for the Mac, but I had already half finished this one when the first other apps were released, and since I was quite happy with the data model I decided to just continue along the path and add some more functions.
 
@@ -50,14 +52,12 @@ https://itunes.apple.com/app/id871852326
 So if you don't want to mess with installing Xcode and whatnot, you can just conveniently download the binary from the Mac App Store.
 
 * Todo
-- [ ] Detect it if the internet connection goes away *and* comes back again
 - [x] Filter for additional droplet state: "new", which means - just created
 - [ ] Add functionality to snapshot machines
 - [ ] Add functionality to restore machines from snapshots
 - [ ] Add support for snapshot / image administration
 - [ ] See if it is possible to list backups / snapshots for machines. This would make it easier to destroy machines as we'd know that we have a snapshot from it.
 - [ ] Localize to other languages (any takers?)
-- [ ] Port back to AFNetworking 1.X so that it also runs on 10.8. This seems to be the only roadblock for 10.8 compatibility.
 
   
 * License
