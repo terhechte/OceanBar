@@ -98,7 +98,14 @@ static const NSUInteger kTabStopWidth = 80;
 //--------------------------------------------------------------------------------------
 
 - (void) addItem:(NSString*)item withValue:(NSString*)value {
-    if (!item || !value)return;
+    if (!item || !value) {
+        NSLog(@"Null value: %@ / %@", item, value);
+        return;
+    }
+    if ([item isKindOfClass:[NSNull class]] || [value isKindOfClass:[NSNull class]]) {
+        NSLog(@"Null value: %@ / %@", item, value);
+        return;
+    }
     
     [_keyStorage addObject:item];
     [_valueStorage addObject:value];
