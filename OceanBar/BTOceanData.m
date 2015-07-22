@@ -313,21 +313,41 @@
     [self dropletAction:droplet verb:@"Destroy" request:@"destroy" finishAction:finishBlock];
 }
 
-- (void) dropletAction:(BTOceanDataDroplet*)droplet verb:(NSString*)verb request:(NSString*)request finishAction:(BTOceanDataAction)finishBlock {
-    /*
-    NSString *shutdownPath = $p(@"%@/droplets/%@/%@/%@", DIGITALOCEAN_BASE_URL, droplet.identifier, request, [self authURLString]);
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:shutdownPath parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self postNotification:NSLocalizedString(@"Success", @"notification for droplet aciton")
+- (void) dropletAction:(BTOceanDataDroplet*)droplet verb:(NSString*)verb request:(NSString*)requestOp finishAction:(BTOceanDataAction)finishBlock {
+    NSString *actionPath = $p(@"%@/droplets/%@/actions", DIGITALOCEAN_BASE_URL, droplet.identifier);
+    
+    NSArray *accounts = [[NXOAuth2AccountStore sharedStore] accounts];
+    if (accounts.count == 0)return;
+    
+    NXOAuth2Account *account = accounts.firstObject;
+    
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:actionPath]
+                                                           cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                                       timeoutInterval:10];
+    
+    [request setHTTPMethod:@"POST"];
+    [request setValue:[NSString stringWithFormat:@"Bearer %@", account.accessToken.accessToken] forHTTPHeaderField:@"Authorization"];
+    [request setValue: @"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody: [[NSString stringWithFormat:@"{\"type\": \"%@\"}", requestOp] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    AFHTTPRequestOperation *op = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    op.responseSerializer = [AFJSONResponseSerializer serializer];
+    [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        [self postNotification:NSLocalizedString(@"Success", @"notification for droplet action")
                       subtitle:$p(NSLocalizedString(@"Droplet '%@' action successful: %@", @"Notification for droplet action"),
                                   droplet.name, verb)];
-        finishBlock(nil);
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
         [self postNotification:NSLocalizedString(@"Failure", @"notification title for failed droplet action")
                       subtitle:$p(NSLocalizedString(@"Droplet %@ failed at: %@", @"notification for failed droplet action"),
                                   droplet.name, verb)];
+        
     }];
-     */
+    [op start];
+    
 }
 
 - (AFHTTPRequestOperation*) requestOperationFor:(NSString*)urlString
