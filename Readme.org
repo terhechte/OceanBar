@@ -1,11 +1,6 @@
 * OceanBar
 ** A Mac OS X Digital Ocean Client
 
-* Note
-This is currently in a non-working state as I'm transitioning from DigitalOcean API V1 to DigitalOcean API V2
-
-
-   
 This is a Mac OS X Client for the Digital Ocean API
 It is compatible with 10.9+
 
