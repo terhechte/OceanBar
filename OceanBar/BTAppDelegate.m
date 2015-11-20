@@ -86,7 +86,9 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
               completionHandler:nil];
     } else {
         // logout
-        [[NXOAuth2AccountStore sharedStore]  removeAccount:accounts.firstObject];
+        for (id acc in accounts) {
+            [[NXOAuth2AccountStore sharedStore]  removeAccount:acc];
+        }
         
         self.currentUserName = @"";
         
