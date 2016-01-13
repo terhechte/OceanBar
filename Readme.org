@@ -28,6 +28,11 @@ I'm planning to add more features to this app (as listed below) but for now it s
 
 ** Installation
 
+*** Download
+
+Simply Download the most [[https://github.com/terhechte/OceanBar/releases][recent binary from the "Releases" tab]].
+
+*** Compile Yourself
 You'll need [[http://cocoapods.org/][CocoaPods]] to compile this project:
 1. Checkout the repository
 2. Jump into a terminal and go into the directory
@@ -39,13 +44,6 @@ pod install
 5. Open kDigitalOceanClientKey.h and enter your DigitalOcean Credentials
 6. Compile, Run & Success
    
-** Mac App Store Installation
-
-This app can be downloaded for free from the Mac App Store:
-https://itunes.apple.com/app/id871852326
-
-So if you don't want to mess with installing Xcode and whatnot, you can just conveniently download the binary from the Mac App Store.
-
 * Todo
 - [x] Filter for additional droplet state: "new", which means - just created
 - [ ] Add functionality to snapshot machines
