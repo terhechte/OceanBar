@@ -6,15 +6,15 @@ It is compatible with 10.9+
 
 ** Features
 
-- [X] Menubar App
-- [X] List active and inactive machines
-- [X] Power Cycle, Shutdown, Reboot, Power Off/On and Destroy machines
-- [X] Open machines ip addresses in the browser on various ports.
-- [X] Get notification for changes in the Notification Center
-- [X] Define reload interval in the preferences
-- [X] Prepared for localization
-- [X] Open Terminal Window (Terminal.app/iTerm) for droplet
-- [X] DigitalOcean API 2.0 
+- Menubar App
+- List active and inactive machines
+- Power Cycle, Shutdown, Reboot, Power Off/On and Destroy machines
+- Open machines ip addresses in the browser on various ports.
+- Get notification for changes in the Notification Center
+- Define reload interval in the preferences
+- Prepared for localization
+- Open Terminal Window (Terminal.app/iTerm) for droplet
+- DigitalOcean API 2.0 
   
 I know that there're by now other Digital Ocean Menubar apps for the Mac, but I had already half finished this one when the first other apps were released, and since I was quite happy with the data model I decided to just continue along the path and add some more functions.
 
