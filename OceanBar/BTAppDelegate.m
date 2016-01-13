@@ -166,6 +166,8 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
     self.currentUserName = self.credentialUsernameField.stringValue;
     
     [self.statusBarController reloadContents];
+    
+    self.loginLogoutButton.title = NSLocalizedString(@"Logout", @"In the preferences, the button");
 }
 
 - (void) loginManagerLoginFailure:(id)loginManager {
