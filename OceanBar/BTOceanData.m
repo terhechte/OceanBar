@@ -356,12 +356,18 @@
                    successBlock:(BTOceanDataAction)success
                       failBlock:(BTOceanDataError)failBlock {
     
-    NSArray *accounts = [[NXOAuth2AccountStore sharedStore] accounts];
-    NXOAuth2Account *account = accounts.firstObject;
+    NSString *customToken = [[NSUserDefaults standardUserDefaults] objectForKey:kCustomTokenKey];
+    if (!customToken) {
+        NSArray *accounts = [[NXOAuth2AccountStore sharedStore] accounts];
+        NXOAuth2Account *account = accounts.firstObject;
+        customToken = account.accessToken.accessToken;
+    }
     
     NSURL *URL = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSURLRequest requestWithURL:URL].mutableCopy;
-    [request setValue:[NSString stringWithFormat:@"Bearer %@", account.accessToken.accessToken] forHTTPHeaderField:@"Authorization"];
+    
+    [request setValue:[NSString stringWithFormat:@"Bearer %@", customToken] forHTTPHeaderField:@"Authorization"];
+    
     AFHTTPRequestOperation *op = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     op.responseSerializer = [AFJSONResponseSerializer serializer];
     [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {

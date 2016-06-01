@@ -127,6 +127,21 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://cloud.digitalocean.com/registrations/new"]];
 }
 
+- (IBAction)doEnterCustomToken:(id)sender {
+    NSString *customToken = [self.customTokenField stringValue];
+    if (!customToken || [customToken length] == 0) {
+        NSRunAlertPanel(@"Error", @"Please provide a valid custom token", @"Ok", nil, nil);
+        return;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setObject:customToken forKey:kCustomTokenKey];
+    
+    [self.statusBarController reloadContents];
+}
+
+- (IBAction)doOpenCustomTokenWebsite:(id)sender {
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://cloud.digitalocean.com/settings/api/tokens"]];
+}
 
 //-----------------------------------------------------------------------------
 #pragma mark BTStatusBarControllerDelegate
@@ -135,6 +150,10 @@ NSString * const kDigitalOceanAPILink = @"https://cloud.digitalocean.com/api_acc
 - (void) openPreferences {
     [NSApp activateIgnoringOtherApps:YES];
     [self.window makeKeyAndOrderFront:self];
+    NSString *customToken = [[NSUserDefaults standardUserDefaults] objectForKey:kCustomTokenKey];
+    if (customToken) {
+        [self.customTokenField setStringValue:customToken];
+    }
 }
 
 - (void) exit {

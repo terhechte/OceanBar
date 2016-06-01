@@ -16,6 +16,7 @@
 @property (weak) IBOutlet NSTextField *credentialUsernameField;
 @property (weak) IBOutlet NSTextField *credentialPasswordField;
 @property (weak) IBOutlet NSWindow *credentialWindow;
+@property (weak) IBOutlet NSTextField *customTokenField;
 @property (retain) NSString *credentialLoginErrorMessage;
 
 @property (retain) NSString *currentUserName;
@@ -24,6 +25,9 @@
 @property (weak) IBOutlet NSTabView *preferencesTabView;
 
 - (IBAction)doLoginToDigitalOcean:(id)sender;
+
+- (IBAction)doEnterCustomToken:(id)sender;
+- (IBAction)doOpenCustomTokenWebsite:(id)sender;
 
 - (IBAction)credentialOk:(id)sender;
 - (IBAction)credentialCancel:(id)sender;

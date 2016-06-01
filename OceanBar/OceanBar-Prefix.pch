@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------------
 #pragma mark Preferences User Defaults Keys
 //-----------------------------------------------------------------------------
-#define kPreferenceReloadIntervalKey @"preferenceReloadInterval";
+#define kCustomTokenKey @"customTokenKey"
 
 //-----------------------------------------------------------------------------
 #pragma mark Macros
